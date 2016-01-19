@@ -1,0 +1,22 @@
+{
+  "db": "bookshelf",
+  "bookshelf": {
+    "db": "mysql",
+    "init": "data/bookshelf/init",
+    "passport" : "data/bookshelf/passport",
+    "migrations": {
+      "directory": "app/data/bookshelf/migrations",
+      "tableName": "schema_version"
+    },
+    "mysql": {
+      "client": "mysql",
+      "connection": {
+        "host": "127.0.0.1",
+        "user": "trackerguias",
+        "password": "trackerguias",
+        "database": "trackerguias",
+        "charset": "utf8"
+      }
+    }
+  }
+}

@@ -1,8 +1,8 @@
 {
   "name": "default-web-app",
   "version": "0.0.1",
-  "author": "Jussi Hallila",
-  "repository": "https://github.com/Xantier/nerd-stack.git",
+  "author": "Joaquin Magneres",
+  "repository": "https://github.com/joaquinmag/trackerguias.git",
   "license": "MIT",
   "scripts": {
     "start": "gulp dev",

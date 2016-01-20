@@ -77,9 +77,13 @@ gulp.task('test', ['runTests']);
 gulp.task('ci', ['lint', 'runTests', 'build']);
 
 var paths = {
-  server: 'run.js',
-  tests: 'spec/**/*.spec.js',
+  server: {
+    js: 'run.js',
+    specs: 'spec/**/*.spec.js'
+  },
   sources: ['app/**/*.js', 'app/**/*.jsx'],
+  styles: 'public/stylesheets/**/*.css',
+  views: 'views/**/*.handlebars',
   client: {
     main: './app/render/client.js',
     build: './public/build/',
@@ -90,24 +94,22 @@ var paths = {
 
 //run app using nodemon
 gulp.task('serve', function () {
-  var client = ['scripts', 'styles'];
-  gulp.watch(paths.sources, client);
-  gulp.watch('public/stylesheets/**/*.css', client);
-  gulp.watch('views/**/*.handlebars', client);
   plugins.nodemon({
-    script: paths.server,
+    script: paths.server.js,
     env: {
       'NODE_ENV': 'development'
     },
-    watch: [paths.sources, paths.tests],
-    ext: 'js, jsx',
-    ignore: [paths.client.sources, 'public/build/**', '*.xml', 'node_modules/**']
-  })
-      .on('start', ['livereload'])
-      .on('change', ['livereload'])
-      .on('restart', function () {
-        debug.log('restarted!');
-      });
+    ignore: ['public/build/**', '*.xml', 'node_modules/**']
+  });
+  gulp.watch(paths.views, ['views']);
+  gulp.watch(paths.sources, ['scripts']);
+  gulp.watch(paths.styles, ['styles']);
+});
+
+gulp.task('views', function() {
+  return gulp.src(paths.views)
+    .pipe(plugins.livereload())
+    .pipe(plugins.notify({message: 'Views reloading done'}));
 });
 
 // Run Javascript linter
@@ -120,7 +122,7 @@ gulp.task('lint', function () {
 
 // Browserify frontend code and compile React JSX files.
 gulp.task('scripts', function () {
-  plugins.browserify(paths.client.main, {debug: true})
+  return plugins.browserify(paths.client.main, {debug: true})
       .ignore(paths.client.ignore) //until System module loader is available
       .transform(plugins.babelify)
       .transform(plugins.reactify)
@@ -131,15 +133,17 @@ gulp.task('scripts', function () {
       .pipe(plugins.uglify())
       .pipe(plugins.sourcemaps.write('./'))
       .pipe(gulp.dest(paths.client.build))
-      .pipe(plugins.livereload());
+      .pipe(plugins.livereload())
+      .pipe(plugins.notify({message: 'scripts reloading done'}));
 });
 
 // Compile CSS file from less styles
 gulp.task('styles', function () {
-  gulp.src(['public/stylesheets/style.css'])
+  return gulp.src(['public/stylesheets/style.css'])
       .pipe(plugins.minifyCss())
       .pipe(gulp.dest(paths.client.build))
-      .pipe(plugins.livereload());
+      .pipe(plugins.livereload())
+      .pipe(plugins.notify({message: 'styles reloading done'}));
 });
 
 // livereload browser on client app changes

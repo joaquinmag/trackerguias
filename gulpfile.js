@@ -93,7 +93,7 @@ gulp.task('serve', function () {
   var client = ['scripts', 'styles'];
   gulp.watch(paths.sources, client);
   gulp.watch('public/stylesheets/**/*.css', client);
-  gulp.watch('views/**/*.jade', client);
+  gulp.watch('views/**/*.handlebars', client);
   plugins.nodemon({
     script: paths.server,
     env: {

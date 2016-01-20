@@ -1,4 +1,5 @@
 import express from 'express';
+import exhbs from 'express-handlebars';
 import flash from 'connect-flash';
 import passport from 'passport';
 import path from 'path';
@@ -10,13 +11,16 @@ import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
 import { logger, stream } from './app/util/logger';
 import database from './app/config/db';
+import { handlebarsHelpers } from './app/util/handlebars';
+import merge from 'merge';
 
 const db = database(passport);
 let app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+let hbs = exhbs.create(merge({defaultLayout: 'main'}, handlebarsHelpers));
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
 
 app.use(favicon(__dirname + '/views/favicon.ico'));
 

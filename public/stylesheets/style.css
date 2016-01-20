@@ -40,7 +40,7 @@ button.mdl-button {
 .form-card-medium > .mdl-card__title, .form-card-wide > .mdl-card__title {
    color: #fff;
    height: 176px;
-   background-color: rgb(105, 240, 174);
+   background-color: rgb(104, 191, 240);
 }
 
 .form-card-medium > .mdl-card__menu, .form-card-wide > .mdl-card__menu {
@@ -50,5 +50,5 @@ button.mdl-button {
 .form-card-large > .mdl-card__title {
    color: #fff;
    height: 64px;
-   background-color: rgb(105, 240, 174);
+   background-color: rgb(104, 191, 240);
 }

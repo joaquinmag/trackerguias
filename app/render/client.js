@@ -1,12 +1,12 @@
-import react from 'react';
-
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Lookup from '../components/tracker/Lookup.jsx'
 
 var trackerGuias = window.trackerGuias || {};
 
 trackerGuias.home = {
   render: function() {
-    console.log("hola");
-    //react.render()
+    ReactDOM.render(<Lookup />, document.getElementById('checkPackage'));
   }
 }
 

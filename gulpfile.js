@@ -131,6 +131,7 @@ gulp.task('lint', function () {
 gulp.task('scripts', function () {
   return plugins.browserify(paths.client.main, {debug: true})
       .transform(plugins.babelify)
+      .transform(plugins.reactify)
       .bundle()
       .pipe(plugins.sourceStream('js.js'))
       .pipe(plugins.buffer())

@@ -2,7 +2,7 @@
 export default function (app, passport) {
 
   app.use('/', function (req, res) {
-    res.render('index');
+    res.render('index', { title: "Seguimiento de encomiendas" });
   });
 
   // 404 Error handling

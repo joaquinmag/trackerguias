@@ -1,5 +1,14 @@
-import React from 'react';
+import react from 'react';
 
-function render() {
-  //React.render(<Handler  />, element);
+
+var trackerGuias = window.trackerGuias || {};
+
+trackerGuias.home = {
+  render: function() {
+    console.log("hola");
+    //react.render()
+  }
 }
+
+// TODO esto no deberia ser asi!
+window.trackerGuias = trackerGuias;

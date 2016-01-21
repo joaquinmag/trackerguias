@@ -69,10 +69,10 @@ gulp.task('drop-dev-db', function() {
  * lint: run JSHint on JS files
  **/
 
-gulp.task('default', ['build', 'serve']);
+gulp.task('default', ['dev-env', 'build', 'serve']);
 gulp.task('build', ['scripts', 'styles']);
-gulp.task('dev', ['lint', 'build', 'serve']);
-gulp.task('debug', ['lint', 'runTests', 'build', 'serve']);
+gulp.task('dev', ['dev-env', 'lint', 'build', 'serve']);
+gulp.task('debug', ['dev-env', 'lint', 'runTests', 'build', 'serve']);
 gulp.task('test', ['runTests']);
 gulp.task('ci', ['lint', 'runTests', 'build']);
 
@@ -91,13 +91,15 @@ var paths = {
   }
 };
 
+gulp.task('dev-env', function() {
+  return plugins.env.set({ NODE_ENV: 'development' })
+    .pipe(plugins.notify({message: 'using development environment'}));
+});
+
 //run app using nodemon
 gulp.task('serve', function () {
   plugins.nodemon({
     script: paths.server.js,
-    env: {
-      'NODE_ENV': 'development'
-    },
     ignore: ['public/build/**', '*.xml', 'node_modules/**']
   });
   gulp.watch(paths.views, ['views']);
@@ -128,7 +130,7 @@ gulp.task('scripts', function () {
       .pipe(plugins.sourceStream('js.js'))
       .pipe(plugins.buffer())
       .pipe(plugins.sourcemaps.init({loadMaps: true}))
-      .pipe(plugins.uglify())
+      .pipe(plugins.if((process.env.NODE_ENV === 'development'), plugins.beautify(), plugins.uglify()))
       .pipe(plugins.sourcemaps.write('./'))
       .pipe(gulp.dest(paths.client.build))
       .pipe(plugins.livereload())
@@ -138,7 +140,7 @@ gulp.task('scripts', function () {
 // Compile CSS file from less styles
 gulp.task('styles', function () {
   return gulp.src(['public/stylesheets/style.css'])
-      .pipe(plugins.minifyCss())
+      .pipe(plugins.if((process.env.NODE_ENV === 'development'), plugins.cssbeautify(), plugins.minifyCss()))
       .pipe(gulp.dest(paths.client.build))
       .pipe(plugins.livereload())
       .pipe(plugins.notify({message: 'styles reloading done'}));

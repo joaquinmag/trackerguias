@@ -1,11 +1,23 @@
-<div id="content">
-	{{#exists message}}
-		<p>{{message.error}}</p>
-		<p>{{message.success}}</p>
-	{{/exists}}
-	<div id="app">
-		{{{ html }}}
-	</div>
+{{#exists message}}
+  <p>{{message.error}}</p>
+  <p>{{message.success}}</p>
+{{/exists}}
+<section class="section--center mdl-grid" style="max-width: 900px;">
+  <div class="mdl-card mdl-cell mdl-cell--12-col mdl-shadow--4dp">
+    <div class="mdl-card__title">
+      <h3 class="mdl-card__title-text">Ingresá los datos del envío</h3>
+		</div>
+		<div class="mdl-card__supporting-text">
+			<p>
+				La información es provista a través de las páginas de las empresas de encomiendas aquí disponibles. <br />
+				Cualquier sugerencia/problema indicarlo <a href="https://github.com/joaquinmag/trackerguias/issues" target="_blank">aquí</a>
+			</p>
+		</div>
+		<div class="section--center">
+			{{{ checkForm }}}
+		</div>
+  </div>
+</section>
 </div>
 <script src="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
 <script src="/js.js"></script>

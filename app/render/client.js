@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Lookup from '../components/tracker/Lookup.jsx'
+import Lookup from '../components/tracker/Lookup.jsx';
 
-var trackerGuias = window.trackerGuias || {};
+let trackerGuias = window.trackerGuias || {};
 
 trackerGuias.home = {
-  render: function() {
+  render: function () {
     ReactDOM.render(<Lookup />, document.getElementById('checkPackage'));
   }
-}
+};
 
 // TODO esto no deberia ser asi!
 window.trackerGuias = trackerGuias;

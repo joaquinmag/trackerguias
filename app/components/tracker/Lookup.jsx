@@ -1,6 +1,8 @@
 'use strict';
 
 import React from 'react';
+import Select from 'react-select';
+import Label from '../common/Label.jsx';
 import Button from '../common/Button.jsx';
 import Input from '../common/Input.jsx';
 //import ThingActions from './ThingActions';
@@ -8,13 +10,40 @@ import Input from '../common/Input.jsx';
 export default React.createClass({
   displayName: 'Lookup',
   getInitialState() {
-    return {editing: false};
+    return {
+      selectedValue: null
+    };
+  },
+  updateValue (newValue) {
+    this.setState({
+      selectedValue: newValue
+    });
   },
   render() {
+    var options = [
+      {
+        label: "OCA",
+        value: "oca"
+      },
+      {
+        label: "BusPack",
+        value: "buspack"
+      }
+    ];
     return (
-      <form ref="trackPackage" action="/tracker?_method=PUT" method="post">
-        <Input name="name" type="text" placeholder="Hello"/>
-        <Button text="Update"/>
+      <form action="/tracker" method="post">
+        <div className="mdl-card__supporting-text">
+          <fieldset>
+            <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield-demo">
+              <Select ref="stateSelect" autofocus options={options} simpleValue clearable={false} name="selected-company" value={this.state.selectValue} onChange={this.updateValue} searchable={true} />
+              <Label htmlFor="trackingNumber" text="# Tracking" />
+              <Input name="username" type="text" required={true}/>
+            </div>
+          </fieldset>
+        </div>
+        <div className="mdl-card__actions mdl-card--border">
+          <Button type="submit" text="Update"/>
+        </div>
       </form>
     );
   }

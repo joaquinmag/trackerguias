@@ -8,6 +8,12 @@ plugins.babelify = require('babelify');
 plugins.sourceStream = require('vinyl-source-stream');
 plugins.buffer = require('vinyl-buffer');
 
+var notifier = plugins.notify.withReporter(function(options, callback) {
+  console.log("Title:", options.title);
+  console.log("Message:", options.message);
+  callback();
+});
+
 /**
  * TODO: Pull this out to somewhere where it can reside while
  * user decides what database to use.
@@ -93,7 +99,7 @@ var paths = {
 
 gulp.task('dev-env', function() {
   return plugins.env.set({ NODE_ENV: 'development' })
-    .pipe(plugins.notify({message: 'using development environment'}));
+    .pipe(notifier('using development environment'));
 });
 
 //run app using nodemon
@@ -110,7 +116,7 @@ gulp.task('serve', function () {
 gulp.task('views', function() {
   return gulp.src(paths.views)
     .pipe(plugins.livereload())
-    .pipe(plugins.notify({message: 'Views reloading done'}));
+    .pipe(notifier('Views reloading done'));
 });
 
 // Run Javascript linter
@@ -125,7 +131,6 @@ gulp.task('lint', function () {
 gulp.task('scripts', function () {
   return plugins.browserify(paths.client.main, {debug: true})
       .transform(plugins.babelify)
-      .transform(plugins.reactify)
       .bundle()
       .pipe(plugins.sourceStream('js.js'))
       .pipe(plugins.buffer())
@@ -134,7 +139,7 @@ gulp.task('scripts', function () {
       .pipe(plugins.sourcemaps.write('./'))
       .pipe(gulp.dest(paths.client.build))
       .pipe(plugins.livereload())
-      .pipe(plugins.notify({message: 'scripts reloading done'}));
+      .pipe(notifier('scripts reloading done'));
 });
 
 // Compile CSS file from less styles
@@ -143,7 +148,7 @@ gulp.task('styles', function () {
       .pipe(plugins.if((process.env.NODE_ENV === 'development'), plugins.cssbeautify(), plugins.minifyCss()))
       .pipe(gulp.dest(paths.client.build))
       .pipe(plugins.livereload())
-      .pipe(plugins.notify({message: 'styles reloading done'}));
+      .pipe(notifier('styles reloading done'));
 });
 
 // livereload browser on client app changes

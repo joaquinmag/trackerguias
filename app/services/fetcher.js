@@ -1,5 +1,4 @@
 import request from 'superagent';
-import {handleServerRequest} from './serverMediator';
 import {get as getCached} from '../util/cache';
 const url_prefix = '/API';
 
@@ -34,9 +33,6 @@ function getXhrData(url, cb) {
  * @returns {*} Optionally returns promises if called without global window object
  */
 export function httpGet(url, dispatch, context) {
-  if (typeof window === 'undefined') {
-    return handleServerRequest(url, context);
-  }
   if (context) {
     const cached = getCached(context.token, context.displayName);
     if (cached) {

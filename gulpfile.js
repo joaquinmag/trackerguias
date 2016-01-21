@@ -87,8 +87,7 @@ var paths = {
   client: {
     main: './app/render/client.js',
     build: './public/build/',
-    basedir: './public/javascripts/',
-    ignore: './app/services/serverMediator.js'
+    basedir: './public/javascripts/'
   }
 };
 
@@ -123,7 +122,6 @@ gulp.task('lint', function () {
 // Browserify frontend code and compile React JSX files.
 gulp.task('scripts', function () {
   return plugins.browserify(paths.client.main, {debug: true})
-      .ignore(paths.client.ignore) //until System module loader is available
       .transform(plugins.babelify)
       .transform(plugins.reactify)
       .bundle()

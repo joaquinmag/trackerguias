@@ -91,7 +91,7 @@ var paths = {
   styles: 'public/stylesheets/**/*.css',
   views: 'views/**/*.handlebars',
   client: {
-    main: './app/render/client.js',
+    main: ['./app/render/client.js', './app/render/ui/ui.js'],
     build: './public/build/',
     basedir: './public/javascripts/'
   }
@@ -121,7 +121,7 @@ gulp.task('views', function() {
 
 // Run Javascript linter
 gulp.task('lint', function () {
-  return gulp.src(['app/**/*.js', 'spec/**/*.js', 'app.js', '!spec/coverage/**'])
+  return gulp.src(['app/**/*.js', 'spec/**/*.js', 'app.js', '!spec/coverage/**', '!app/render/ui/*.min.js'])
       .pipe(plugins.eslint())
       .pipe(plugins.eslint.format())
       .pipe(plugins.eslint.failOnError());
@@ -145,7 +145,7 @@ gulp.task('scripts', function () {
 
 // Compile CSS file from less styles
 gulp.task('styles', function () {
-  return gulp.src(['public/stylesheets/style.css'])
+  return gulp.src(paths.styles)
       .pipe(plugins.if((process.env.NODE_ENV === 'development'), plugins.cssbeautify(), plugins.minifyCss()))
       .pipe(gulp.dest(paths.client.build))
       .pipe(plugins.livereload())

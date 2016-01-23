@@ -5,6 +5,7 @@ import Label from '../common/Label.jsx';
 import Button from '../common/Button.jsx';
 import Input from '../common/Input.jsx';
 import Select from '../common/Select.jsx';
+import TrackerActions from './TrackerActions';
 
 export default React.createClass({
   displayName: 'Lookup',
@@ -26,8 +27,7 @@ export default React.createClass({
   },
   lookupTrackingInformation (event) {
     event.preventDefault();
-
-    
+    TrackerActions.lookupPackage(this.getState());
   },
   render() {
     var options = [

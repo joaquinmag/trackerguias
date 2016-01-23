@@ -1,8 +1,7 @@
 import request from 'superagent';
-import {get as getCached} from '../util/cache';
-const url_prefix = '/API';
+const url_prefix = '';
 
-function getXhrData(url, cb) {
+export function getXhrData(url, cb) {
   let response;
   request.get(url_prefix + url)
       .set('Accept', 'application/json')
@@ -22,27 +21,6 @@ function getXhrData(url, cb) {
           return response;
         }
       });
-}
-
-/**
- * Determines if execution is on a browser or server and makes a get request
- * or retrieves data directly.
- * @param {string} url
- * @param {string} dispatch - Flux dispatcher function
- * @param {Object=} context - Optional context holding cached data. If exists, no XHR made.
- * @returns {*} Optionally returns promises if called without global window object
- */
-export function httpGet(url, dispatch, context) {
-  if (context) {
-    const cached = getCached(context.token, context.displayName);
-    if (cached) {
-      // Rehydrates store with cached data
-      dispatch(cached);
-    }
-  } else {
-    // Fills store with retrieved data
-    getXhrData(url, dispatch);
-  }
 }
 
 export function httpPost(url, payload, dispatch) {

@@ -33,8 +33,6 @@
     "morgan": "^1.5.2",
     "mysql": "^2.8.0",
     "object-assign": "~3.0.0",
-    "passport": "~0.2.1",
-    "passport-local": "~1.0.0",
     "react": "^0.14",
     "react-dom": "^0.14.6",
     "serve-favicon": "~2.3.0",

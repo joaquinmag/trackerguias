@@ -1,5 +1,10 @@
+export default function (app) {
 
-export default function (app, passport) {
+  app.use('/tracker', function (req, res) {
+    res.json({
+      htmlResponse: '<p>Hola!</p>'
+    });
+  });
 
   app.use('/', function (req, res) {
     res.render('index', { title: 'Seguimiento de encomiendas' });

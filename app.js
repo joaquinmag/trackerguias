@@ -1,7 +1,6 @@
 import express from 'express';
 import exhbs from 'express-handlebars';
 import flash from 'connect-flash';
-import passport from 'passport';
 import path from 'path';
 import favicon from 'serve-favicon';
 import dexter from 'morgan';
@@ -14,7 +13,7 @@ import database from './app/config/db';
 import { handlebarsHelpers } from './app/util/handlebars';
 import merge from 'merge';
 
-const db = database(passport);
+const db = database();
 let app = express();
 
 // view engine setup
@@ -41,8 +40,6 @@ app.use(require('express-session')({
   saveUninitialized: false
 }));
 
-app.use(passport.initialize());
-app.use(passport.session());
 app.use(express.static(path.join(__dirname, '/public/build')));
 
 app.use(function (req, res, next) {
@@ -50,7 +47,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-require('./app/router/router')(app, passport);
+require('./app/router/router')(app);
 
 // error handlers
 

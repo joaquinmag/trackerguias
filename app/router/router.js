@@ -1,12 +1,12 @@
 export default function (app) {
 
-  app.use('/tracker', function (req, res) {
+  app.post('/tracker', function (req, res) {
     res.json({
       htmlResponse: '<p>Hola!</p>'
     });
   });
 
-  app.use('/', function (req, res) {
+  app.get('/', function (req, res) {
     res.render('index', { title: 'Seguimiento de encomiendas' });
   });
 

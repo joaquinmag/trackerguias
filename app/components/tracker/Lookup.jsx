@@ -5,14 +5,15 @@ import Label from '../common/Label.jsx';
 import Button from '../common/Button.jsx';
 import Input from '../common/Input.jsx';
 import Select from '../common/Select.jsx';
-import TrackerActions from './TrackerActions';
+import {TrackerActions} from './TrackerActions';
 
 export default React.createClass({
   displayName: 'Lookup',
   getInitialState() {
     return {
       courier: null,
-      trackingNumber: ''
+      trackingNumber: '',
+      loading: false
     };
   },
   changeTrackingNumber (event) {
@@ -27,7 +28,18 @@ export default React.createClass({
   },
   lookupTrackingInformation (event) {
     event.preventDefault();
-    TrackerActions.lookupPackage(this.getState());
+    if (!this.state.loading) {
+      this.setState({
+        loading: true
+      }, function() {
+        TrackerActions.lookupPackage({
+          courier: this.state.courier,
+          trackingNumber: this.state.trackingNumber
+        }).then(function() {
+          this.setState
+        });
+      });
+    }
   },
   render() {
     var options = [

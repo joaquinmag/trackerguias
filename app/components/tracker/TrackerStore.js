@@ -9,12 +9,10 @@ function changeLookup(response) {
   tracking = response.data;
 }
 
-
 const TrackerStore = assign({}, EventEmitter.prototype, {
   getData: function () {
     return {
-      data: things,
-      metadata: metadata
+      data: tracking
     };
   },
 
@@ -34,7 +32,7 @@ const TrackerStore = assign({}, EventEmitter.prototype, {
 // Register callback to handle all updates
 trackerDispatcher().register(function (action) {
   switch (action.actionType) {
-    case TrackerActions.LOOKUP_PACKAGE:
+    case TrackerActions.constants().LOOKUP_PACKAGE:
       changeLookup(action.text);
       break;
 

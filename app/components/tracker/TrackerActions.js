@@ -14,16 +14,17 @@ dispatcher.transmit = function (actionType) {
 
 export function trackerDispatcher() {
   return dispatcher;
-};
+}
 
 export class TrackerActions {
 
-  constructor() {
-    this.LOOKUP_PACKAGE = 'lookup-package';
+  static constants() {
+    return Object.freeze({
+      LOOKUP_PACKAGE: 'lookup-package'
+    });
   }
 
   static lookupPackage(payload) {
-    return httpPost('/tracker', payload, dispatcher.transmit(LOOKUP_PACKAGE));
+    return httpPost('/tracker', payload, dispatcher.transmit(this.constants().LOOKUP_PACKAGE));
   }
-
 }

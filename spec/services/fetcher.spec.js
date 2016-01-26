@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import nock from 'nock';
 import {set as setCache} from '../../app/util/cache';
-import {httpGet, httpPost, httpDel, httpPut} from '../../app/services/fetcher';
+import {httpGet, httpPost} from '../../app/services/fetcher';
 
 var url = '/API/testUrl';
 
@@ -60,47 +60,4 @@ describe('fetcher', function () {
     httpPost('/testUrl', {}, stubCallback);
   });
 
-  it('should call callback with response when delete succeeds', function () {
-    nock('http://localhost')
-        .delete(url).reply(200, successfulResp, {'Content-Type': 'application/json'});
-    var stubCallback = function (response) {
-      expect(response).to.equal(successfulResp);
-    };
-    httpDel('/testUrl', stubCallback);
-  });
-
-  it('should respond with error message when delete fails', function (done) {
-    nock('http://localhost')
-        .delete(url).reply(404, 'something awful happened');
-    var res;
-    var stubCallback = function (response) {
-      res = response;
-      expect(res).to.equal('Failed to delete');
-      done();
-    };
-    httpDel('/testUrl', stubCallback);
-  });
-
-  it('should call callback with response when put succeeds', function () {
-    nock('http://localhost')
-        .put(url).reply(200, successfulResp, {'Content-Type': 'application/json'});
-    var stubCallback = function (response) {
-      expect(response).to.equal(successfulResp);
-    };
-    httpPut('/testUrl', {}, stubCallback);
-  });
-
-  it('should respond with error message when put fails', function (done) {
-    nock('http://localhost')
-        .put(url).reply(404, 'something awful happened');
-    var res;
-    var stubCallback = function (response) {
-      res = response;
-      expect(res).to.deep.equal({'error': 'message: something awful happened'});
-      done();
-    };
-    httpPut('/testUrl', {}, stubCallback);
-  });
-
 });
-

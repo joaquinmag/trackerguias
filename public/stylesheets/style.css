@@ -52,3 +52,8 @@ button.mdl-button {
    height: 64px;
    background-color: rgb(104, 191, 240);
 }
+
+
+section {
+  max-width: 900px;
+}

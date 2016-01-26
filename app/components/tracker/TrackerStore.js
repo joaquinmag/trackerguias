@@ -2,17 +2,17 @@ import { trackerDispatcher, TrackerActions } from './TrackerActions';
 import assign from 'object-assign';
 import {EventEmitter} from 'events';
 
-let tracking;
-
-function changeLookup(response) {
-  tracking = response.data;
-}
+let selfTracking;
 
 const TrackerStore = assign({}, EventEmitter.prototype, {
-  getData: function () {
-    return {
-      data: tracking
+  saveTracking: function (tracking) {
+    selfTracking = {
+      tracking: tracking
     };
+  },
+
+  getTracking: function () {
+    return selfTracking;
   },
 
   emitChange: function (actionType) {
@@ -29,16 +29,15 @@ const TrackerStore = assign({}, EventEmitter.prototype, {
 });
 
 // Register callback to handle all updates
-trackerDispatcher().register(function (action) {
-  switch (action.actionType) {
+trackerDispatcher().register(function (data) {
+  switch (data.actionType) {
     case TrackerActions.constants().LOOKUP_PACKAGE:
-      changeLookup(action.text);
+      TrackerStore.saveTracking(data.text.htmlResponse);
       break;
-
     default:
     // no op
   }
-  TrackerStore.emitChange(action.actionType);
+  TrackerStore.emitChange(data.actionType);
 });
 
 export default TrackerStore;

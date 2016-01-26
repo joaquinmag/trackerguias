@@ -1,5 +1,5 @@
 import {Dispatcher} from 'flux';
-import {getXhrData, httpPost, httpPut, httpDel} from '../../services/fetcher';
+import {httpPost} from '../../services/fetcher';
 
 const dispatcher = new Dispatcher();
 

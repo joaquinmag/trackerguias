@@ -36,6 +36,8 @@ export default React.createClass({
         TrackerActions.lookupPackage({
           courier: self.state.courier,
           trackingNumber: self.state.trackingNumber
+        }).catch(function (error) {
+          self.setState({ showError: true });
         }).then(function (response) {
           console.log(response);
           self.setState({ loading: false });

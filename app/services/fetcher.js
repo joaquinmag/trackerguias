@@ -25,7 +25,6 @@ export function getXhrData(url, cb) {
 }
 
 export function httpPost(url, payload, dispatch) {
-  let response;
   return when.promise(function (resolve, reject, notify) {
     request.post(url_prefix + url)
       .type('application/json')
@@ -35,59 +34,18 @@ export function httpPost(url, payload, dispatch) {
       .send(payload)
       .end(function (err, res) {
         if (err) {
-          response = {error: 'message: ' + err.message};
-        }
-        if (res.ok) {
-          resolve(res.text);
+          reject({error: err});
         } else {
-          reject(JSON.stringify({error: 'message: ' + res.text}));
+          console.log(JSON.parse(res.text));
+          if (res.ok) {
+            resolve(JSON.parse(res.text));
+          } else {
+            reject({error: 'message: ' + res.text});
+          }
         }
         if (dispatch) {
-          dispatch(JSON.parse(response));
+          dispatch(JSON.parse(res.text));
         }
     });
   });
-}
-
-export function httpDel(url, dispatch) {
-  request.del(url_prefix + url)
-      .type('application/json')
-      .set('X-Requested-With', 'XMLHttpRequest')
-      .set('port', 3000)
-      .end(function (err, res) {
-        let response;
-        if (err) {
-          response = {error: 'message: ' + err.message};
-        }
-        if (res.ok) {
-          response = res.text;
-          dispatch(JSON.parse(response));
-        } else {
-          dispatch('Failed to delete');
-        }
-      });
-}
-
-export function httpPut(url, payload, dispatch) {
-  let response;
-  request.put(url_prefix + url)
-      .type('application/json')
-      .set('Accept', 'application/json')
-      .set('X-Requested-With', 'XMLHttpRequest')
-      .set('port', 3000)
-      .send(payload)
-      .end(function (err, res) {
-        if (err) {
-          response = {error: 'message: ' + err.message};
-        }
-        if (res.ok) {
-          response = res.text;
-        } else {
-          response = JSON.stringify({error: 'message: ' + res.text});
-        }
-        if (dispatch) {
-          dispatch(JSON.parse(response));
-          return response;
-        }
-      });
 }

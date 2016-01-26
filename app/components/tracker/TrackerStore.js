@@ -1,5 +1,4 @@
 import { trackerDispatcher, TrackerActions } from './TrackerActions';
-import _ from 'lodash';
 import assign from 'object-assign';
 import {EventEmitter} from 'events';
 

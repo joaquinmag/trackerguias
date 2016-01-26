@@ -50,6 +50,10 @@ export default React.createClass({
       {
         label: "BusPack",
         value: "buspack"
+      },
+      {
+        label: "Via Cargo",
+        value: "via-cargo"
       }
     ];
     return (

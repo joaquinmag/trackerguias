@@ -39,7 +39,6 @@ export default React.createClass({
         }).catch(function (error) {
           self.setState({ showError: true });
         }).then(function (response) {
-          console.log(response);
           self.setState({ loading: false });
         });
       });

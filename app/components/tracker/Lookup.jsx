@@ -27,16 +27,18 @@ export default React.createClass({
     });
   },
   lookupTrackingInformation (event) {
+    var self = this;
     event.preventDefault();
-    if (!this.state.loading) {
-      this.setState({
+    if (!self.state.loading) {
+      self.setState({
         loading: true
       }, function() {
         TrackerActions.lookupPackage({
-          courier: this.state.courier,
-          trackingNumber: this.state.trackingNumber
-        }).then(function() {
-          this.setState
+          courier: self.state.courier,
+          trackingNumber: self.state.trackingNumber
+        }).then(function (response) {
+          console.log(response);
+          self.setState({ loading: false });
         });
       });
     }

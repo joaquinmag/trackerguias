@@ -1,4 +1,5 @@
 import request from 'superagent';
+import when from 'when';
 const url_prefix = '';
 
 export function getXhrData(url, cb) {
@@ -25,7 +26,8 @@ export function getXhrData(url, cb) {
 
 export function httpPost(url, payload, dispatch) {
   let response;
-  request.post(url_prefix + url)
+  return when.promise(function (resolve, reject, notify) {
+    request.post(url_prefix + url)
       .type('application/json')
       .set('Accept', 'application/json')
       .set('X-Requested-With', 'XMLHttpRequest')
@@ -36,15 +38,15 @@ export function httpPost(url, payload, dispatch) {
           response = {error: 'message: ' + err.message};
         }
         if (res.ok) {
-          response = res.text;
+          resolve(res.text);
         } else {
-          response = JSON.stringify({error: 'message: ' + res.text});
+          reject(JSON.stringify({error: 'message: ' + res.text}));
         }
         if (dispatch) {
           dispatch(JSON.parse(response));
-          return response;
         }
-      });
+    });
+  });
 }
 
 export function httpDel(url, dispatch) {

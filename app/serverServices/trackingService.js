@@ -1,4 +1,4 @@
-import config from '../config/config.json';
+//import config from '../config/config.json';
 //const trackingRepository = require('../data/' + config.db + '/persistence/trackingRepository');
 import when from 'when';
 import easysoap from 'easysoap';
@@ -18,13 +18,13 @@ export default {
   trackPackage(courier, trackingData) {
     let soapClient = easysoap.createClient(clientParams[courier]);
     return when(soapClient.call({
-       method    : 'Tracking_Pieza',
-       attributes: {
-           xmlns: '#Oca_e_Pak'
-       },
-       params: {
-           Pieza: "1808200000003582106"
-       }
+      method: 'Tracking_Pieza',
+      attributes: {
+        xmlns: '#Oca_e_Pak'
+      },
+      params: {
+        Pieza: '1808200000003582106'
+      }
     }));
-  },
+  }
 };

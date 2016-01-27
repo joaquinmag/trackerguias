@@ -1,4 +1,5 @@
 import trackingService from '../serverServices/trackingService';
+import {stream} from '../util/logger';
 
 export default function (app) {
 
@@ -7,13 +8,13 @@ export default function (app) {
     let trackingNumber = req.body.trackingNumber;
     trackingService.trackPackage(courier, trackingNumber).then(
       (data) => {
-        console.log(data.body.json);
+        stream.debug(data.body.json);
         res.json({
           htmlResponse: JSON.stringify(data.body.json)
         });
-    })
+      })
     .catch((err) => {
-      console.error(err);
+      stream.error(err);
       res.status(500);
     });
   });

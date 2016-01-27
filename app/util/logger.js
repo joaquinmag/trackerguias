@@ -26,7 +26,10 @@ export const stream = {
   write: function (message) {
     logger.info(message);
   },
-  writeDebug: function(message) {
+  debug: function (message) {
     logger.debug(message);
+  },
+  error: function (message) {
+    logger.error(message);
   }
 };

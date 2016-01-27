@@ -25,7 +25,7 @@ export function getXhrData(url, cb) {
 }
 
 export function httpPost(url, payload, dispatch) {
-  return when.promise(function (resolve, reject, notify) {
+  return when.promise(function (resolve, reject) {
     request.post(url_prefix + url)
       .type('application/json')
       .set('Accept', 'application/json')
@@ -44,6 +44,6 @@ export function httpPost(url, payload, dispatch) {
         } else {
           reject({error: 'message: An error occurred'});
         }
-    });
+      });
   });
 }

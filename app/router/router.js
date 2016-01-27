@@ -1,8 +1,20 @@
+import trackingService from '../server/trackingService';
+
 export default function (app) {
 
   app.post('/tracker', function (req, res) {
-    res.json({
-      htmlResponse: '<p>Hola!</p>'
+    let courier = req.body.courier;
+    let trackingNumber = req.body.trackingNumber;
+    trackingService.trackPackage(courier, trackingNumber).then(
+      (data) => {
+        console.log(data.body.json);
+        res.json({
+          htmlResponse: JSON.stringify(data.body.json)
+        });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500);
     });
   });
 

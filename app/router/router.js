@@ -1,7 +1,15 @@
 import trackingService from '../serverServices/trackingService';
 import {stream} from '../util/logger';
+import _ from 'lodash';
 
 export default function (app) {
+
+  app.use(function (req, res, next) {
+    stream.debug(`Request received for url: ${req.originalUrl}`);
+    stream.debug(`POST params: ${JSON.stringify(req.body)}`);
+    stream.debug(`GET params: ${JSON.stringify(req.query)}`);
+    next();
+  });
 
   app.post('/tracker', function (req, res) {
     let courier = req.body.courier;

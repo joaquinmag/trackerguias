@@ -11,7 +11,7 @@ export default React.createClass({
   displayName: 'Lookup',
   getInitialState() {
     return {
-      courier: null,
+      courier: 'oca',
       trackingNumber: '',
       loading: false
     };

@@ -12,7 +12,8 @@ export default React.createClass({
     onChange: React.PropTypes.func
   },
   render() {
-    let options = this.props.options;
+    const self = this;
+    let options = self.props.options;
     return (
       <div className="mdl-selectfield mdl-js-selectfield" style={{display: 'block'}}>
           <select id={this.props.name} name={this.props.name}

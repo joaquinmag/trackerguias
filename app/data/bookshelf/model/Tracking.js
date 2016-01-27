@@ -1,4 +1,4 @@
-export default class Thing {
+export default class Tracking {
   static register(bookshelf) {
     bookshelf.models.Thing = bookshelf.Model.extend({
       tableName: 'Thing',

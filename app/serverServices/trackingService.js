@@ -8,7 +8,7 @@ import _ from 'lodash';
 //   'SOAPAction': '#Oca_e_Pak/Tracking_Pieza'
 // }
 
-const callSoapCourier = function (callSettings) {
+const callSoapCourier = function (callSettings, trackingData) {
   let soapClient = easysoap.createClient(callSettings);
   return when.promise((resolve, reject) => {
     soapClient.call({
@@ -17,7 +17,7 @@ const callSoapCourier = function (callSettings) {
         xmlns: '#Oca_e_Pak'
       },
       params: {
-        Pieza: '1808200000003582106'
+        Pieza: trackingData
       }
     })
     .then((result) => {
@@ -52,6 +52,6 @@ export default {
       throw new Error("courierSettings not available");
     }
     stream.debug(`courierSettings: ${JSON.stringify(courierSettings)}`);
-    return courierSettings.callClient(courierSettings.params);
+    return courierSettings.callClient(courierSettings.params, trackingData);
   }
 };

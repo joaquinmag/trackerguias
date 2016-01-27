@@ -24,7 +24,7 @@ export default function (app) {
       })
     .catch((err) => {
       stream.error(err);
-      res.status(500);
+      res.send(500, { error: 'Unexpected error' });
     });
   });
 

@@ -9,10 +9,8 @@ let bookshelf = new Bookshelf(knexConfig);
 bookshelf.models = {};
 
 // Register models
-import User from './model/User';
-User.register(bookshelf);
-import Thing from './model/Thing';
-Thing.register(bookshelf);
+import Tracking from './model/Tracking';
+Tracking.register(bookshelf);
 
 // TODO: Migrations functions to automatically update DB
 // var db = import from'./db/schema').tables;

@@ -1,4 +1,4 @@
-import trackingService from '../server/trackingService';
+import trackingService from '../serverServices/trackingService';
 
 export default function (app) {
 

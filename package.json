@@ -22,7 +22,6 @@
     "express-flash": "0.0.2",
     "express-handlebars": "~2.0.1",
     "express-session": "~1.11.2",
-    "flux": "^2.0.1",
     "helmet": "~0.10.0",
     "keymirror": "~0.1.1",
     "knex": "^0.8.6",

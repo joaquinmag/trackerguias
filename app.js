@@ -17,7 +17,6 @@ import moment from 'moment';
 const db = database();
 let app = express();
 
-
 // view engine setup
 let hbs = exhbs.create(merge({defaultLayout: 'main'}, handlebarsHelpers));
 app.engine('handlebars', hbs.engine);
@@ -30,7 +29,7 @@ app.use(dexter('combined', {'stream': stream}));
 app.set('logger', logger);
 
 moment().utc();
-stream.debug(`time set to UTC. Local Time: ${moment().format("dddd Do MMMM YYYY hh:mm:ss a")}`);
+stream.debug(`time set to UTC. Local Time: ${moment().format('dddd Do MMMM YYYY hh:mm:ss a')}`);
 
 app.use(methodOverride('_method', {methods: ['POST', 'GET']}));
 app.use(bodyParser.json());

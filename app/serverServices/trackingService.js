@@ -4,6 +4,7 @@ import when from 'when';
 import easysoap from 'easysoap';
 import {stream} from '../util/logger';
 import _ from 'lodash';
+import moment from 'moment';
 
 const adaptOcaResult = function (data) {
   data.diffgram.NewDataSet.map((array) => {
@@ -11,6 +12,17 @@ const adaptOcaResult = function (data) {
     var sucursal = _.find(array.Table, (obj) => { return _.has(obj, 'SUC'); });
     var date = _.find(array.Table, (obj) => { return _.has(obj, 'fecha'); });
     var motivo = _.find(array.Table, (obj) => { return _.has(obj, 'Descripcion_Motivo'); });
+
+    if (date) {
+      date = moment.parseZone(date);
+    }
+
+    return {
+      'fecha': date,
+      'estado': estado,
+      'sucursal': sucursal,
+      'motivo': motivo
+    };
   })
 };
 

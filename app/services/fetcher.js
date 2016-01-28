@@ -37,9 +37,13 @@ export function httpPost(url, payload, dispatch) {
           reject({error: err});
         } else if (res.ok) {
           let parsedJSON = JSON.parse(res.text);
-          resolve(parsedJSON);
-          if (dispatch) {
-            dispatch(parsedJSON);
+          if (parsedJSON.estado == 'ok') {
+            resolve(parsedJSON);
+            if (dispatch) {
+              dispatch(parsedJSON);
+            }
+          } else {
+            reject(parsedJSON);
           }
         } else {
           reject({error: 'message: An error occurred'});

@@ -9,6 +9,9 @@ import {TrackerActions} from './TrackerActions';
 
 export default React.createClass({
   displayName: 'Lookup',
+  propTypes: {
+    updateTrackingInformation: React.PropTypes.func.isRequired
+  },
   getInitialState() {
     return {
       courier: 'oca',
@@ -33,7 +36,7 @@ export default React.createClass({
       self.setState({
         loading: true
       }, function() {
-        TrackerActions.lookupPackage({
+        var dataPromise = TrackerActions.lookupPackage({
           courier: self.state.courier,
           trackingNumber: self.state.trackingNumber
         }).catch(function (error) {
@@ -41,6 +44,7 @@ export default React.createClass({
         }).then(function (response) {
           self.setState({ loading: false });
         });
+        self.props.updateTrackingInformation(dataPromise);
       });
     }
   },

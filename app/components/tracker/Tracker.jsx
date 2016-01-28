@@ -6,7 +6,31 @@ import LookupResponse from './LookupResponse.jsx';
 
 export default React.createClass({
   displayName: 'Tracker',
-  render() {
+  getInitialState () {
+    return {
+      trackingStatus: null,
+      showTrackingInformation: false,
+      informationNotFound: false
+    };
+  },
+  handleTrackingUpdate (dataPromise) {
+    let self = this;
+    dataPromise.then(function (trackingStatus) {
+      self.setState({
+        trackingStatus: trackingStatus,
+        showTrackingInformation: true,
+        informationNotFound: false
+      });
+    })
+    .catch(function (err) {
+      self.setState({
+        trackingStatus: null,
+        showTrackingInformation: true,
+        informationNotFound: true
+      });
+    });
+  },
+  render () {
     return (
       <div>
         <section className="section--center mdl-grid">
@@ -20,11 +44,11 @@ export default React.createClass({
         				Cualquier sugerencia/problema indicarlo <a href="https://github.com/joaquinmag/trackerguias/issues" target="_blank">aquí</a>
         			</p>
         		</div>
-            <Lookup />
+            <Lookup updateTrackingInformation={this.handleTrackingUpdate} />
           </div>
         </section>
         <section className="section--center mdl-grid">
-          <LookupResponse />
+          <LookupResponse trackingStatus={this.state.trackingStatus} show={this.state.showTrackingInformation} notFound={this.state.informationNotFound} />
         </section>
       </div>
     );

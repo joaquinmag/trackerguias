@@ -7,11 +7,11 @@ import _ from 'lodash';
 import moment from 'moment';
 
 const adaptOcaResult = function (data) {
-  data.diffgram.NewDataSet.map((array) => {
-    var estado = _.find(array.Table, (obj) => { return _.has(obj, 'Desdcripcion_Estado'); });
-    var sucursal = _.find(array.Table, (obj) => { return _.has(obj, 'SUC'); });
-    var date = _.find(array.Table, (obj) => { return _.has(obj, 'fecha'); });
-    var motivo = _.find(array.Table, (obj) => { return _.has(obj, 'Descripcion_Motivo'); });
+  return data.diffgram.NewDataSet.map((array) => {
+    let estado = _.find(array.Table, (obj) => { return _.has(obj, 'Desdcripcion_Estado'); });
+    let sucursal = _.find(array.Table, (obj) => { return _.has(obj, 'SUC'); });
+    let date = _.find(array.Table, (obj) => { return _.has(obj, 'fecha'); });
+    let motivo = _.find(array.Table, (obj) => { return _.has(obj, 'Descripcion_Motivo'); });
 
     if (date) {
       date = moment.parseZone(date);
@@ -23,7 +23,15 @@ const adaptOcaResult = function (data) {
       'sucursal': sucursal,
       'motivo': motivo
     };
-  })
+  }).sort((a, b) => {
+    if (a.isSame(b)) {
+      return 0;
+    } else if (a.isBefore(b)) {
+      return -1;
+    } else {
+      return 1;
+    }
+  });
 };
 
 const ocaSoapClient = function (callSettings, trackingData) {

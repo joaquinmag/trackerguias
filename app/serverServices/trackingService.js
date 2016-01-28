@@ -20,10 +20,10 @@ class OcaClient {
       throw new PackageNotFoundException("Oca Package not found", trackingData);
     }
     return root.diffgram.NewDataSet.map((array) => {
-      let estado = _.find(array.Table, (obj) => { return _.has(obj, 'Desdcripcion_Estado'); });
-      let sucursal = _.find(array.Table, (obj) => { return _.has(obj, 'SUC'); });
-      let date = _.find(array.Table, (obj) => { return _.has(obj, 'fecha'); });
-      let motivo = _.find(array.Table, (obj) => { return _.has(obj, 'Descripcion_Motivo'); });
+      let estado = _.find(array.Table, (obj) => { return _.has(obj, 'Desdcripcion_Estado'); }).Desdcripcion_Estado;
+      let sucursal = _.find(array.Table, (obj) => { return _.has(obj, 'SUC'); }).SUC;
+      let date = _.find(array.Table, (obj) => { return _.has(obj, 'fecha'); }).fecha;
+      let motivo = _.find(array.Table, (obj) => { return _.has(obj, 'Descripcion_Motivo'); }).Descripcion_Motivo;
 
       if (date) {
         date = moment.parseZone(date);
@@ -37,9 +37,9 @@ class OcaClient {
       };
     }).sort((a, b) => {
       let returningValue = 0;
-      if (a.isAfter(b)) {
+      if (a.fecha.isAfter(b.fecha)) {
         returningValue = 1;
-      } else if (a.isBefore(b)) {
+      } else if (a.fecha.isBefore(b.fecha)) {
         returningValue = -1;
       }
       return returningValue;

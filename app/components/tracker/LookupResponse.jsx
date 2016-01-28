@@ -1,7 +1,7 @@
 'use strict';
 
+import moment from 'moment';
 import React from 'react';
-import TrackerStore from './TrackerStore';
 import {TrackerActions} from './TrackerActions';
 
 export default React.createClass({
@@ -11,14 +11,8 @@ export default React.createClass({
     show: React.PropTypes.bool,
     notFound: React.PropTypes.bool
   },
-  getInitialState() {
-    return {
-      htmlResponse: null,
-    };
-  },
   render() {
     var self = this;
-    console.log(JSON.stringify(self.props));
     if (self.props.show) {
       var notFound = function () {
         if (self.props.notFound) {

@@ -38,12 +38,9 @@ export function httpPost(url, payload, dispatch) {
         } else if (res.ok) {
           let parsedJSON = JSON.parse(res.text);
           console.log(JSON.stringify(parsedJSON));
-          console.log('ingrese aqui 0!');
           if (parsedJSON.state === 'ok') {
-            console.log(parsedJSON.state);
-            resolve(parsedJSON);
+            resolve(parsedJSON.data);
           } else {
-            console.log(parsedJSON.state);
             reject(parsedJSON);
           }
         } else {

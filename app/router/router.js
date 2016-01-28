@@ -21,7 +21,7 @@ export default function (app) {
         stream.debug(data);
         res.json({
           state: 'ok',
-          htmlResponse: data
+          data: data
         });
       })
     .catch((err) => {

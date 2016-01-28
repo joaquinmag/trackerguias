@@ -19,12 +19,12 @@ export default function (app) {
       (data) => {
         stream.debug(data);
         res.json({
-          htmlResponse: JSON.stringify(data)
+          htmlResponse: data
         });
       })
     .catch((err) => {
       stream.error(err);
-      res.send(500, { error: 'Unexpected error' });
+      res.status(500).send({ error: 'Unexpected error' });
     });
   });
 

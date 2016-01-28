@@ -15,7 +15,8 @@
         "user": "trackerguias",
         "password": "trackerguias",
         "database": "trackerguias",
-        "charset": "utf8"
+        "charset": "utf8",
+        "timezone": "UTC"
       }
     }
   }

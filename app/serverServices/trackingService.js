@@ -5,10 +5,19 @@ import easysoap from 'easysoap';
 import {stream} from '../util/logger';
 import _ from 'lodash';
 import moment from 'moment';
+import {PackageNotFoundException} from '../util/exceptions';
 
 class OcaClient {
 
-  adaptOcaResult(data) {
+  constructor(settings) {
+    this.settings = settings;
+  }
+
+  adaptOcaResult(data, trackingData) {
+    stream.debug(JSON.stringify(data));
+    if (!data.diffgram) {
+      throw new PackageNotFoundException("Oca Package not found", trackingData);
+    }
     return data.diffgram.NewDataSet.map((array) => {
       let estado = _.find(array.Table, (obj) => { return _.has(obj, 'Desdcripcion_Estado'); });
       let sucursal = _.find(array.Table, (obj) => { return _.has(obj, 'SUC'); });
@@ -36,9 +45,9 @@ class OcaClient {
     });
   }
 
-  webClient(callSettings, trackingData) {
+  webClient(trackingData) {
     let self = this;
-    let soapClient = easysoap.createClient(callSettings);
+    let soapClient = easysoap.createClient(self.settings);
     return soapClient.call({
       method: 'Tracking_Pieza',
       attributes: {
@@ -51,7 +60,7 @@ class OcaClient {
       if (!result) {
         throw new Error('result should be initialized');
       }
-      return self.adaptOcaResult(result.data);
+      return self.adaptOcaResult(result.data, trackingData);
     });
   }
 }
@@ -59,12 +68,11 @@ class OcaClient {
 const clientParams = [
   {
     courier: 'oca',
-    callClient: new OcaClient(),
-    params: {
+    callClient: new OcaClient({
       host: 'webservice.oca.com.ar',
       path: '/epak_tracking/Oep_TrackEPak.asmx',
       wsdl: '/epak_tracking/Oep_TrackEPak.asmx?WSDL'
-    }
+    })
   }
 ];
 
@@ -75,6 +83,6 @@ export default {
       throw new Error('courierSettings not available ');
     }
     stream.debug(`courierSettings: ${JSON.stringify(courierSettings)}`);
-    return courierSettings.callClient.webClient(courierSettings.params, trackingData);
+    return courierSettings.callClient.webClient(trackingData);
   }
 };

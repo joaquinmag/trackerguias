@@ -7,9 +7,9 @@ import {TrackerActions} from './TrackerActions';
 export default React.createClass({
   displayName: 'LookupResponse',
   propTypes: {
-    trackingStatus: React.PropTypes.array.isRequired,
-    show: React.PropTypes.bool.isRequired,
-    notFound: React.PropTypes.bool.isRequired
+    trackingStatus: React.PropTypes.array,
+    show: React.PropTypes.bool,
+    notFound: React.PropTypes.bool
   },
   getInitialState() {
     return {
@@ -18,10 +18,11 @@ export default React.createClass({
   },
   render() {
     var self = this;
+    console.log(JSON.stringify(self.props));
     if (self.props.show) {
       var notFound = function () {
         if (self.props.notFound) {
-          return <div className="section__title mdl-cell mdl-cell--12-col"><h4>Paquete no encontrado</h4></div>;
+          return <div className="mdl-card__title"><h5 className="mdl-card__title-text">Paquete no encontrado</h5></div>;
         }
       }();
       var trackingStatus = function () {
@@ -39,10 +40,4 @@ export default React.createClass({
     }
     return <span></span>;
   },
-  componentDidMount: function() {
-    componentHandler.upgradeDom();
-  },
-  componentDidUpdate() {
-    componentHandler.upgradeDom();
-  }
 });

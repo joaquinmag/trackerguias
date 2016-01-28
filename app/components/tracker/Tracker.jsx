@@ -15,7 +15,10 @@ export default React.createClass({
   },
   handleTrackingUpdate (dataPromise) {
     let self = this;
+    console.log(dataPromise);
     dataPromise.then(function (trackingStatus) {
+      console.log('ingrese aqui!');
+      console.log(JSON.stringify(trackingStatus));
       self.setState({
         trackingStatus: trackingStatus,
         showTrackingInformation: true,
@@ -53,10 +56,4 @@ export default React.createClass({
       </div>
     );
   },
-  componentDidMount() {
-    componentHandler.upgradeDom();
-  },
-  componentDidUpdate() {
-    componentHandler.upgradeDom();
-  }
 });

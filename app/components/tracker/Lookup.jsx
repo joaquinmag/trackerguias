@@ -39,11 +39,8 @@ export default React.createClass({
         var dataPromise = TrackerActions.lookupPackage({
           courier: self.state.courier,
           trackingNumber: self.state.trackingNumber
-        }).catch(function (error) {
-          self.setState({ showError: true });
-        }).then(function (response) {
-          self.setState({ loading: false });
         });
+        self.setState({ loading: false });
         self.props.updateTrackingInformation(dataPromise);
       });
     }
@@ -80,10 +77,4 @@ export default React.createClass({
       </form>
     );
   },
-  componentDidMount() {
-    componentHandler.upgradeDom();
-  },
-  componentDidUpdate() {
-    componentHandler.upgradeDom();
-  }
 });

@@ -15,10 +15,11 @@ class OcaClient {
 
   adaptOcaResult(data, trackingData) {
     stream.debug(JSON.stringify(data));
-    if (!data.diffgram) {
+    let root = data.Tracking_PiezaResponse.Tracking_PiezaResult[1];
+    if (!root.diffgram) {
       throw new PackageNotFoundException("Oca Package not found", trackingData);
     }
-    return data.diffgram.NewDataSet.map((array) => {
+    return root.diffgram.NewDataSet.map((array) => {
       let estado = _.find(array.Table, (obj) => { return _.has(obj, 'Desdcripcion_Estado'); });
       let sucursal = _.find(array.Table, (obj) => { return _.has(obj, 'SUC'); });
       let date = _.find(array.Table, (obj) => { return _.has(obj, 'fecha'); });

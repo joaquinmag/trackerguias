@@ -1,6 +1,7 @@
 import trackingService from '../serverServices/trackingService';
 import {stream} from '../util/logger';
 import _ from 'lodash';
+import {PackageNotFoundException} from '../util/exceptions';
 
 export default function (app) {
 
@@ -19,12 +20,21 @@ export default function (app) {
       (data) => {
         stream.debug(data);
         res.json({
+          state: 'ok',
           htmlResponse: data
         });
       })
     .catch((err) => {
-      stream.error(err);
-      res.status(500).send({ error: 'Unexpected error' });
+      if (err instanceof PackageNotFoundException) {
+        stream.debug('Package not found');
+        res.json({
+          state: 'wrong',
+          message: 'Paquete no encontrado'
+        });
+      } else {
+        stream.error(err);
+        res.status(500).send({ error: 'Unexpected error' });
+      }
     });
   });
 

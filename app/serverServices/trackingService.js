@@ -17,13 +17,21 @@ class OcaClient {
     stream.debug(JSON.stringify(data));
     let root = data.Tracking_PiezaResponse.Tracking_PiezaResult[1];
     if (!root.diffgram) {
-      throw new PackageNotFoundException("Oca Package not found", trackingData);
+      throw new PackageNotFoundException('Oca Package not found', trackingData);
     }
     return root.diffgram.NewDataSet.map((array) => {
-      let estado = _.find(array.Table, (obj) => { return _.has(obj, 'Desdcripcion_Estado'); }).Desdcripcion_Estado;
-      let sucursal = _.find(array.Table, (obj) => { return _.has(obj, 'SUC'); }).SUC;
-      let date = _.find(array.Table, (obj) => { return _.has(obj, 'fecha'); }).fecha;
-      let motivo = _.find(array.Table, (obj) => { return _.has(obj, 'Descripcion_Motivo'); }).Descripcion_Motivo;
+      let estado = _.find(array.Table, (obj) => {
+        return _.has(obj, 'Desdcripcion_Estado');
+      }).Desdcripcion_Estado;
+      let sucursal = _.find(array.Table, (obj) => {
+        return _.has(obj, 'SUC');
+      }).SUC;
+      let date = _.find(array.Table, (obj) => {
+        return _.has(obj, 'fecha');
+      }).fecha;
+      let motivo = _.find(array.Table, (obj) => {
+        return _.has(obj, 'Descripcion_Motivo');
+      }).Descripcion_Motivo;
 
       if (date) {
         date = moment.parseZone(date);

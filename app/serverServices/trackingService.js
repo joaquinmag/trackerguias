@@ -4,39 +4,38 @@ import when from 'when';
 import easysoap from 'easysoap';
 import {stream} from '../util/logger';
 import _ from 'lodash';
-// headers: {
-//   'SOAPAction': '#Oca_e_Pak/Tracking_Pieza'
-// }
 
-const callSoapCourier = function (callSettings, trackingData) {
+const adaptOcaResult = function (data) {
+  data.diffgram.NewDataSet.map((array) => {
+    var estado = _.find(array.Table, (obj) => { return _.has(obj, 'Desdcripcion_Estado'); });
+    var sucursal = _.find(array.Table, (obj) => { return _.has(obj, 'SUC'); });
+    var date = _.find(array.Table, (obj) => { return _.has(obj, 'fecha'); });
+    var motivo = _.find(array.Table, (obj) => { return _.has(obj, 'Descripcion_Motivo'); });
+  })
+};
+
+const ocaSoapClient = function (callSettings, trackingData) {
   let soapClient = easysoap.createClient(callSettings);
-  return when.promise((resolve, reject) => {
-    soapClient.call({
-      method: 'Tracking_Pieza',
-      attributes: {
-        xmlns: '#Oca_e_Pak'
-      },
-      params: {
-        Pieza: trackingData
-      }
-    })
-    .then((result) => {
-      if (!result) {
-        reject(new Error("result should be initialized"));
-      } else {
-        resolve(result.data);
-      }
-    })
-    .catch((err) => {
-      reject(err);
-    });
+  return soapClient.call({
+    method: 'Tracking_Pieza',
+    attributes: {
+      xmlns: '#Oca_e_Pak'
+    },
+    params: {
+      Pieza: trackingData
+    }
+  }).then((result) => {
+    if (!result) {
+      throw new Error("result should be initialized");
+    }
+    return adaptOcaResult(result.data);
   });
 };
 
 const clientParams = [
   {
     courier: 'oca',
-    callClient: callSoapCourier,
+    callClient: ocaSoapClient,
     params: {
       host: 'webservice.oca.com.ar',
       path: '/epak_tracking/Oep_TrackEPak.asmx',

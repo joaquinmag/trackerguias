@@ -57,3 +57,7 @@ button.mdl-button {
 section {
   max-width: 900px;
 }
+
+.full-width {
+  width:100%;
+}

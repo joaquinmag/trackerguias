@@ -21,8 +21,34 @@ export default React.createClass({
       }();
       var trackingStatus = function () {
         if (!self.props.notFound) {
-          var json = JSON.stringify(self.props.trackingStatus);
-          return <div className="section__text mdl-cell mdl-cell--12-col" dangerouslySetInnerHTML={{__html: json}}></div>;
+          var statusList = self.props.trackingStatus;
+          return (
+            <table className="mdl-data-table mdl-js-data-table mdl-shadow--2dp full-width">
+              <thead>
+                <tr>
+                  <th className="mdl-data-table__cell--non-numeric">Fecha y Hora</th>
+                  <th className="mdl-data-table__cell--non-numeric full-width">Estado</th>
+                  <th className="mdl-data-table__cell--non-numeric">Sucursal</th>
+                  <th className="mdl-data-table__cell--non-numeric">Motivo</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  statusList.map(function (statusItem, i) {
+                    var date = moment(statusItem.fecha).local().format('DD/MM/YYYY hh:mm:ss A');
+                    return (
+                      <tr key={i}>
+                        <td className="mdl-data-table__cell--non-numeric">{date}</td>
+                        <td className="mdl-data-table__cell--non-numeric">{statusItem.estado}</td>
+                        <td className="mdl-data-table__cell--non-numeric">{statusItem.sucursal}</td>
+                        <td className="mdl-data-table__cell--non-numeric">{statusItem.motivo}</td>
+                      </tr>
+                    );
+                  })
+                }
+              </tbody>
+            </table>
+          );
         }
       }();
       return (

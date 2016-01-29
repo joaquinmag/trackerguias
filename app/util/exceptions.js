@@ -4,3 +4,9 @@ export class PackageNotFoundException {
     this.trackingData = trackingData;
   }
 }
+
+export class SoapConnectionError {
+  consructor(message) {
+    this.message = message;
+  }
+}

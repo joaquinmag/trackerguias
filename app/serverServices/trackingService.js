@@ -5,7 +5,7 @@ import easysoap from 'easysoap';
 import {stream} from '../util/logger';
 import _ from 'lodash';
 import moment from 'moment';
-import {PackageNotFoundException} from '../util/exceptions';
+import {PackageNotFoundException, SoapConnectionError} from '../util/exceptions';
 
 class OcaClient {
 
@@ -15,6 +15,20 @@ class OcaClient {
 
   adaptOcaResult(data, trackingData) {
     stream.debug(JSON.stringify(data));
+    if (data && data.Fault) {
+      const faultstring = () => {
+        const obj = _.find(data.Fault, (obj) => {
+          return _.has(obj, 'faultstring');
+        });
+        if (obj) {
+          return `Soap fault with faultstring: ${obj.faultstring}`;
+        }
+        return 'Soap Fault with no faultstring available';
+      }();
+      stream.error(faultstring);
+      throw new SoapConnectionError(faultstring);
+    }
+
     let root = data.Tracking_PiezaResponse.Tracking_PiezaResult[1];
     if (!root.diffgram) {
       throw new PackageNotFoundException('Oca Package not found', trackingData);

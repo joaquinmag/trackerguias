@@ -9,18 +9,18 @@ export default React.createClass({
   propTypes: {
     trackingStatus: React.PropTypes.array,
     show: React.PropTypes.bool,
-    notFound: React.PropTypes.bool
+    errorMessage: React.PropTypes.string
   },
   render() {
-    var self = this;
+    const self = this;
     if (self.props.show) {
-      var notFound = function () {
-        if (self.props.notFound) {
-          return <div className="mdl-card__title"><h5 className="mdl-card__title-text">Paquete no encontrado</h5></div>;
+      const errorMessage = function () {
+        if (self.props.errorMessage) {
+          return <div className="mdl-card__title"><h5 className="mdl-card__title-text">{self.props.errorMessage}</h5></div>;
         }
       }();
       var trackingStatus = function () {
-        if (!self.props.notFound) {
+        if (!self.props.errorMessage) {
           var statusList = self.props.trackingStatus;
           return (
             <table className="mdl-data-table mdl-js-data-table mdl-shadow--2dp full-width">
@@ -53,7 +53,7 @@ export default React.createClass({
       }();
       return (
         <div className="mdl-card mdl-cell mdl-cell--12-col mdl-shadow--4dp">
-          {notFound}
+          {errorMessage}
           {trackingStatus}
         </div>
       );

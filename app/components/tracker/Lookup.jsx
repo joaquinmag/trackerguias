@@ -78,12 +78,7 @@ export default React.createClass({
         value: "via-cargo"
       }
     ];
-    const disabled = function() {
-      if (this.props.parentIsWorking || this.state.loading) {
-        return {disabled: disabled};
-      }
-      return {};
-    };
+    const disabled = (this.props.parentIsWorking || this.state.loading);
     return (
       <form action="/tracker" method="post" onSubmit={this.lookupTrackingInformation}>
         <div className="mdl-card__supporting-text">
@@ -96,7 +91,7 @@ export default React.createClass({
           </fieldset>
         </div>
         <div className="mdl-card__actions mdl-card--border">
-          <Button type="submit" text="Buscar" {...disabled}/>
+          <Button type="submit" text="Buscar" disabled={disabled} />
         </div>
       </form>
     );

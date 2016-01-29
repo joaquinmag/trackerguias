@@ -1,7 +1,7 @@
 import trackingService from '../serverServices/trackingService';
 import {stream} from '../util/logger';
 import _ from 'lodash';
-import {PackageNotFoundException} from '../util/exceptions';
+import {PackageNotFoundException, SoapConnectionError} from '../util/exceptions';
 
 export default function (app) {
 
@@ -26,10 +26,14 @@ export default function (app) {
       })
     .catch((err) => {
       if (err instanceof PackageNotFoundException) {
-        stream.debug('Package not found');
         res.json({
           state: 'wrong',
           message: 'Paquete no encontrado'
+        });
+      } else if (err instanceof SoapConnectionError) {
+        res.json({
+          state: 'wrong',
+          message: 'Problemas de conexión con el servidor'
         });
       } else {
         stream.error(err);

@@ -13,7 +13,7 @@ export default React.createClass({
       requestData: null,
       trackingStatus: null,
       showTrackingInformation: false,
-      informationNotFound: false
+      errorMessage: null
     };
   },
   handleTrackingUpdate (dataPromise) {
@@ -22,15 +22,17 @@ export default React.createClass({
       self.setState({
         trackingStatus: trackingStatus,
         showTrackingInformation: true,
-        informationNotFound: false
+        errorMessage: null
       });
     })
     .catch(function (err) {
-      self.setState({
-        trackingStatus: null,
-        showTrackingInformation: true,
-        informationNotFound: true
-      });
+      if (err.status == 'wrong') {
+        self.setState({
+          trackingStatus: null,
+          showTrackingInformation: true,
+          errorMessage: err.message
+        });
+      }
     });
   },
   handleTrackingRequestUpdate (requestData) {
@@ -47,7 +49,7 @@ export default React.createClass({
   render () {
     const self = this;
     const subscribeForm = function () {
-      if (self.state.showTrackingInformation && !self.state.informationNotFound) {
+      if (self.state.showTrackingInformation && !self.state.errorMessage) {
         return <SubscribeForm trackingRequestData={self.state.trackingRequestData} setWorking={self.setWorking} parentIsWorking={self.state.working} />;
       }
     }();
@@ -68,7 +70,7 @@ export default React.createClass({
           </div>
         </section>
         <section className="section--center mdl-grid">
-          <LookupResponse trackingStatus={this.state.trackingStatus} show={this.state.showTrackingInformation} notFound={this.state.informationNotFound} />
+          <LookupResponse trackingStatus={this.state.trackingStatus} show={this.state.showTrackingInformation} errorMessage={this.state.errorMessage} />
         </section>
         <section className="section--center mdl-grid">
           {subscribeForm}

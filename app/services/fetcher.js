@@ -41,10 +41,10 @@ export function httpPost(url, payload) {
           if (parsedJSON.state === 'ok') {
             resolve(parsedJSON.data);
           } else {
-            reject(parsedJSON);
+            reject({ status: 'wrong', message: parsedJSON.message });
           }
         } else {
-          reject({error: 'message: An error occurred'});
+          reject({ status: 'error', 'message': 'An error occurred' });
         }
       });
   });

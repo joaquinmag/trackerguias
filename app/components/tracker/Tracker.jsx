@@ -45,7 +45,12 @@ export default React.createClass({
     });
   },
   render () {
-    let showSubscribeForm = this.state.showTrackingInformation && !this.state.informationNotFound;
+    const self = this;
+    const subscribeForm = function () {
+      if (self.state.showTrackingInformation && !self.state.informationNotFound) {
+        return <SubscribeForm trackingRequestData={self.state.trackingRequestData} setWorking={self.setWorking} parentIsWorking={self.state.working} />;
+      }
+    }();
     return (
       <div>
         <section className="section--center mdl-grid">
@@ -66,7 +71,7 @@ export default React.createClass({
           <LookupResponse trackingStatus={this.state.trackingStatus} show={this.state.showTrackingInformation} notFound={this.state.informationNotFound} />
         </section>
         <section className="section--center mdl-grid">
-          <SubscribeForm showForm={showSubscribeForm} trackingRequestData={this.state.trackingRequestData} setWorking={this.setWorking} parentIsWorking={this.state.working} />
+          {subscribeForm}
         </section>
       </div>
     );

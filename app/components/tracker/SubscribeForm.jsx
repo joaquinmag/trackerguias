@@ -9,7 +9,6 @@ import Select from '../common/Select.jsx';
 export default React.createClass({
   displayName: 'SubscribeForm',
   propTypes: {
-    showForm: React.PropTypes.bool.isRequired,
     trackingRequestData: React.PropTypes.object,
     setWorking: React.PropTypes.func,
     parentIsWorking: React.PropTypes.bool
@@ -59,9 +58,6 @@ export default React.createClass({
     }
   },
   render() {
-    if (!this.props.showForm) {
-      return <span></span>;
-    }
     return (
       <div className="mdl-card mdl-cell mdl-cell--12-col mdl-shadow--4dp">
         <div className="mdl-card__supporting-text">

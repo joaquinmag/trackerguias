@@ -3,11 +3,14 @@
 import React from 'react';
 import Lookup from './Lookup.jsx';
 import LookupResponse from './LookupResponse.jsx';
+import SubscribeForm from './SubscribeForm.jsx';
 
 export default React.createClass({
   displayName: 'Tracker',
   getInitialState () {
     return {
+      isWorking: false,
+      requestData: null,
       trackingStatus: null,
       showTrackingInformation: false,
       informationNotFound: false
@@ -30,7 +33,19 @@ export default React.createClass({
       });
     });
   },
+  handleTrackingRequestUpdate (requestData) {
+    let self = this;
+    self.setState({
+      trackingRequest: requestData
+    });
+  },
+  setWorking (isWorking) {
+    this.setState({
+      working: isWorking
+    });
+  },
   render () {
+    let showSubscribeForm = this.state.showTrackingInformation && !this.state.informationNotFound;
     return (
       <div>
         <section className="section--center mdl-grid">
@@ -44,11 +59,14 @@ export default React.createClass({
         				Cualquier sugerencia/problema indicarlo <a href="https://github.com/joaquinmag/trackerguias/issues" target="_blank">aquí</a>
         			</p>
         		</div>
-            <Lookup updateTrackingInformation={this.handleTrackingUpdate} />
+            <Lookup setWorking={this.setWorking} parentIsWorking={this.state.working} updateTrackingInformation={this.handleTrackingUpdate} onTrackingRequestUpdate={this.handleTrackingRequestUpdate} />
           </div>
         </section>
         <section className="section--center mdl-grid">
           <LookupResponse trackingStatus={this.state.trackingStatus} show={this.state.showTrackingInformation} notFound={this.state.informationNotFound} />
+        </section>
+        <section className="section--center mdl-grid">
+          <SubscribeForm showForm={showSubscribeForm} trackingRequestData={this.state.trackingRequestData} setWorking={this.setWorking} parentIsWorking={this.state.working} />
         </section>
       </div>
     );

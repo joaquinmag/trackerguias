@@ -24,7 +24,7 @@ export function getXhrData(url, cb) {
       });
 }
 
-export function httpPost(url, payload, dispatch) {
+export function httpPost(url, payload) {
   return when.promise(function (resolve, reject) {
     request.post(url_prefix + url)
       .type('application/json')

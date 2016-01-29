@@ -99,4 +99,10 @@ export default React.createClass({
       </form>
     );
   },
+  componentDidMount: function(){
+    componentHandler.upgradeDom();
+  },
+  componentDidUpdate: function(){
+      componentHandler.upgradeDom();
+  }
 });

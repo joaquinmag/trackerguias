@@ -60,4 +60,10 @@ export default React.createClass({
     }
     return <span></span>;
   },
+  componentDidMount: function(){
+    componentHandler.upgradeDom();
+  },
+  componentDidUpdate: function(){
+      componentHandler.upgradeDom();
+  }
 });

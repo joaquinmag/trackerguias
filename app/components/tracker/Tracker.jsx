@@ -76,4 +76,10 @@ export default React.createClass({
       </div>
     );
   },
+  componentDidMount: function(){
+    componentHandler.upgradeDom();
+  },
+  componentDidUpdate: function(){
+      componentHandler.upgradeDom();
+  }
 });

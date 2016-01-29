@@ -71,7 +71,7 @@ export default React.createClass({
         <form action="/tracker" method="post" onSubmit={this.subscribeToUpdates}>
           <div className="mdl-card__supporting-text">
             <fieldset>
-              <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield-demo">
+              <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                 <Label htmlFor="email" text="Email" />
                 <Input name="email" type="email" required={true} onChange={this.changeEmail} />
               </div>
@@ -88,4 +88,10 @@ export default React.createClass({
       </div>
     );
   },
+  componentDidMount: function(){
+    componentHandler.upgradeDom();
+  },
+  componentDidUpdate: function(){
+      componentHandler.upgradeDom();
+  }
 });

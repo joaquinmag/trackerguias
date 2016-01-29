@@ -37,7 +37,6 @@ export function httpPost(url, payload) {
           reject({error: err});
         } else if (res.ok) {
           let parsedJSON = JSON.parse(res.text);
-          console.log(JSON.stringify(parsedJSON));
           if (parsedJSON.state === 'ok') {
             resolve(parsedJSON.data);
           } else {

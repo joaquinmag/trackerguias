@@ -37,7 +37,7 @@ export function httpPost(url, payload) {
           reject({error: err});
         } else if (res.ok) {
           let parsedJSON = JSON.parse(res.text);
-          if (parsedJSON.state === 'ok') {
+          if (parsedJSON.status === 'ok') {
             resolve(parsedJSON.data);
           } else {
             reject({ status: 'wrong', message: parsedJSON.message });

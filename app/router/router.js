@@ -12,6 +12,40 @@ export default function (app) {
     next();
   });
 
+  const errorResponse = function (err, res) {
+    if (err instanceof PackageNotFoundException) {
+      res.json({
+        status: 'wrong',
+        message: 'Paquete no encontrado'
+      });
+    } else if (err instanceof SoapConnectionError) {
+      res.json({
+        status: 'wrong',
+        message: 'Problemas de conexión con el servidor'
+      });
+    } else {
+      stream.error(err);
+      res.status(500).send({ error: 'Unexpected error' });
+    }
+  };
+
+  app.post('/subscribe', (req, res) => {
+    const emailSubscribe = req.body.email;
+    const receiveMoreInfo = req.body.receiveMoreInfo;
+    const trackingData = req.body.trackingData;
+
+    trackingService.subscribeEmail(emailSubscribe, receiveMoreInfo, trackingData)
+    .then(() => {
+      res.json({
+        status: 'ok',
+        message: 'Suscripcion satisfactoria'
+      });
+    })
+    .catch((err) => {
+      errorResponse(err, res);
+    });
+  });
+
   app.post('/tracker', function (req, res) {
     let courier = req.body.courier;
     let trackingNumber = req.body.trackingNumber;
@@ -20,25 +54,12 @@ export default function (app) {
       (data) => {
         stream.debug(data);
         res.json({
-          state: 'ok',
+          status: 'ok',
           data: data
         });
       })
     .catch((err) => {
-      if (err instanceof PackageNotFoundException) {
-        res.json({
-          state: 'wrong',
-          message: 'Paquete no encontrado'
-        });
-      } else if (err instanceof SoapConnectionError) {
-        res.json({
-          state: 'wrong',
-          message: 'Problemas de conexión con el servidor'
-        });
-      } else {
-        stream.error(err);
-        res.status(500).send({ error: 'Unexpected error' });
-      }
+      errorResponse(err, res);
     });
   });
 

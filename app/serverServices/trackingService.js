@@ -107,5 +107,11 @@ export default {
     }
     stream.debug(`courierSettings: ${JSON.stringify(courierSettings)}`);
     return courierSettings.callClient.webClient(trackingData);
+  },
+  subscribeEmail(email, receiveMoreInfo, trackingData) {
+    this.trackPackage(trackinData.courier, trackinData.trackingNumber)
+    .then((data) => {
+
+    })
   }
 };

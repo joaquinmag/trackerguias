@@ -42,7 +42,7 @@ export default React.createClass({
         TrackerActions.subscribeEmail({
           email: self.state.email,
           receiveMoreInfo: self.state.receiveMoreInfo,
-          trackingData: self.props.trackingRequestData
+          packageInformation: self.props.trackingRequestData
         })
         .then(function() {
           self.setState({

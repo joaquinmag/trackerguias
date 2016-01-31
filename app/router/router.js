@@ -32,9 +32,9 @@ export default function (app) {
   app.post('/subscribe', (req, res) => {
     const emailSubscribe = req.body.email;
     const receiveMoreInfo = req.body.receiveMoreInfo;
-    const trackingData = req.body.trackingData;
+    const packageInformation = req.body.packageInformation;
 
-    trackingService.subscribeEmail(emailSubscribe, receiveMoreInfo, trackingData)
+    trackingService.subscribeEmail(emailSubscribe, receiveMoreInfo, packageInformation)
     .then(() => {
       res.json({
         status: 'ok',
@@ -48,8 +48,8 @@ export default function (app) {
 
   app.post('/tracker', function (req, res) {
     let courier = req.body.courier;
-    let trackingNumber = req.body.trackingNumber;
-    trackingService.trackPackage(courier, trackingNumber)
+    let trackingData = req.body.trackingData;
+    trackingService.trackPackage(courier, trackingData)
     .then(
       (data) => {
         stream.debug(data);

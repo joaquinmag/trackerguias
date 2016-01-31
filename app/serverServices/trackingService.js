@@ -71,6 +71,7 @@ class OcaClient {
 
   webClient(trackingData) {
     let self = this;
+    let packageId = trackingData.packageId;
     let soapClient = easysoap.createClient(self.settings);
     return soapClient.call({
       method: 'Tracking_Pieza',
@@ -78,13 +79,13 @@ class OcaClient {
         xmlns: '#Oca_e_Pak'
       },
       params: {
-        Pieza: trackingData
+        Pieza: packageId
       }
     }).then((result) => {
       if (!result) {
         throw new Error('result should be initialized');
       }
-      return self.adaptOcaResult(result.data, trackingData);
+      return self.adaptOcaResult(result.data, packageId);
     });
   }
 }
@@ -109,8 +110,8 @@ export default {
     stream.debug(`courierSettings: ${JSON.stringify(courierSettings)}`);
     return courierSettings.callClient.webClient(trackingData);
   },
-  subscribeEmail(email, receiveMoreInfo, trackingData) {
-    this.trackPackage(trackingData.courier, trackingData.trackingNumber)
+  subscribeEmail(email, receiveMoreInfo, packageInformation) {
+    return this.trackPackage(packageInformation.courier, packageInformation.trackingData)
     .then((data) => {
 
     })

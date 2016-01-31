@@ -53,7 +53,9 @@ export default React.createClass({
       }, function() {
         var dataPromise = TrackerActions.lookupPackage({
           courier: self.state.courier,
-          trackingNumber: self.state.trackingNumber
+          trackingData: {
+            packageId: self.state.trackingNumber
+          }
         })
         .finally(function () {
           self.setState({ loading: false });

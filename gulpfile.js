@@ -91,7 +91,7 @@ var paths = {
   styles: 'public/stylesheets/**/*.css',
   views: 'views/**/*.handlebars',
   client: {
-    main: ['./app/render/client.js', './app/render/ui/ui.js'],
+    main: ['./app/client/render/client.js', './app/client/render/ui/ui.js'],
     build: './public/build/',
     basedir: './public/javascripts/'
   }
@@ -121,7 +121,7 @@ gulp.task('views', function() {
 
 // Run Javascript linter
 gulp.task('lint', function () {
-  return gulp.src(['app/**/*.js', 'spec/**/*.js', 'app.js', '!spec/coverage/**', '!app/render/ui/*.min.js'])
+  return gulp.src(['app/**/*.js', 'spec/**/*.js', 'app.js', '!spec/coverage/**', '!app/client/render/ui/*.min.js'])
       .pipe(plugins.eslint())
       .pipe(plugins.eslint.format())
       .pipe(plugins.eslint.failOnError());

@@ -1,4 +1,4 @@
-import trackingService from '../serverServices/trackingService';
+import trackingService from '../services/trackingService';
 import {stream} from '../util/logger';
 import _ from 'lodash';
 import {PackageNotFoundException, SoapConnectionError} from '../util/exceptions';

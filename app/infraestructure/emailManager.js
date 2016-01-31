@@ -2,7 +2,7 @@ import when from 'when';
 import mandrill from '../config/mandrill';
 
 export default {
-  sendConfirmationEmail (email, packageInformation) {
+  sendConfirmationEmail(email, packageInformation) {
     return when.promise((resolve, reject) => {
       let template_name = 'confirm-subscription';
       let message = {

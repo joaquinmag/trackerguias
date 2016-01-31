@@ -7,7 +7,7 @@ import dexter from 'morgan';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
-import expressValidator from 'express-validator';
+import validator from './app/controller/validator';
 import methodOverride from 'method-override';
 import { logger, stream } from './app/util/logger';
 import database from './app/config/db';
@@ -35,7 +35,7 @@ stream.debug(`time set to UTC. Local Time: ${moment().format('dddd Do MMMM YYYY 
 app.use(methodOverride('_method', {methods: ['POST', 'GET']}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(expressValidator());
+app.use(validator());
 app.use(cookieParser());
 app.use(flash());
 app.use(helmet());
@@ -47,7 +47,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-require('./app/router/router')(app);
+require('./app/controller/router')(app);
 
 // error handlers
 

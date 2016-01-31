@@ -10,7 +10,7 @@ export default React.createClass({
   getInitialState () {
     return {
       isWorking: false,
-      requestData: null,
+      trackingRequestData: null,
       trackingStatus: null,
       showTrackingInformation: false,
       errorMessage: null
@@ -38,7 +38,7 @@ export default React.createClass({
   handleTrackingRequestUpdate (requestData) {
     let self = this;
     self.setState({
-      trackingRequest: requestData
+      trackingRequestData: requestData
     });
   },
   setWorking (isWorking) {

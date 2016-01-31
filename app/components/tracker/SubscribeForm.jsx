@@ -4,7 +4,7 @@ import React from 'react';
 import Label from '../common/Label.jsx';
 import Button from '../common/Button.jsx';
 import Input from '../common/Input.jsx';
-import Select from '../common/Select.jsx';
+import {TrackerActions} from './TrackerActions';
 
 export default React.createClass({
   displayName: 'SubscribeForm',
@@ -35,7 +35,7 @@ export default React.createClass({
     let self = this;
     event.preventDefault();
     if (!self.state.loading && !self.props.parentIsWorking) {
-      self.setWorking(true);
+      self.props.setWorking(true);
       self.setState({
         loading: true
       }, function() {

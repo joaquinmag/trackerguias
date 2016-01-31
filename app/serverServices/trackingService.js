@@ -110,7 +110,7 @@ export default {
     return courierSettings.callClient.webClient(trackingData);
   },
   subscribeEmail(email, receiveMoreInfo, trackingData) {
-    this.trackPackage(trackinData.courier, trackinData.trackingNumber)
+    this.trackPackage(trackingData.courier, trackingData.trackingNumber)
     .then((data) => {
 
     })

@@ -27,6 +27,7 @@
     "knex": "^0.8.6",
     "less-middleware": "^2.0.1",
     "lodash": "^3.4.0",
+    "mandrill-api": "^1.0.45",
     "material-design-lite": "^1.0.0-3",
     "merge": "^1.2.0",
     "method-override": "~2.3.2",

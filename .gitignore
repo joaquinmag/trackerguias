@@ -3,3 +3,4 @@
 nerd-stack.iml
 /spec/coverage
 all-logs.log
+app/config/mandrill.js

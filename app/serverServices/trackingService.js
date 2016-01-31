@@ -1,12 +1,12 @@
 //import config from '../config/config.json';
 //const trackingRepository = require('../data/' + config.db + '/persistence/trackingRepository');
-import mandrill from '../config/mandrill';
 import when from 'when';
 import easysoap from 'easysoap';
 import {stream} from '../util/logger';
 import _ from 'lodash';
 import moment from 'moment';
 import {PackageNotFoundException, SoapConnectionError} from '../util/exceptions';
+import emailManager from '../infraestructure/emailManager';
 
 class OcaClient {
 
@@ -111,9 +111,12 @@ export default {
     return courierSettings.callClient.webClient(trackingData);
   },
   subscribeEmail(email, receiveMoreInfo, packageInformation) {
+    packageInformation.toString = () => {
+      return packageInformation.trackingData.packageId;
+    };
     return this.trackPackage(packageInformation.courier, packageInformation.trackingData)
     .then((data) => {
-
-    })
+      return emailManager.sendConfirmationEmail(email, packageInformation);
+    });
   }
 };

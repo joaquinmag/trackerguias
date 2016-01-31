@@ -15,7 +15,6 @@ class OcaClient {
   }
 
   adaptOcaResult(data, trackingData) {
-    stream.debug(JSON.stringify(data));
     if (data && data.Fault) {
       const faultstring = (function () {
         const faultData = _.find(data.Fault, (obj) => {

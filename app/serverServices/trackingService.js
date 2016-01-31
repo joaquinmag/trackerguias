@@ -1,5 +1,6 @@
 //import config from '../config/config.json';
 //const trackingRepository = require('../data/' + config.db + '/persistence/trackingRepository');
+import mandrill from '../config/mandrill';
 import when from 'when';
 import easysoap from 'easysoap';
 import {stream} from '../util/logger';

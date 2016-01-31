@@ -3,6 +3,23 @@ import {stream} from '../util/logger';
 import _ from 'lodash';
 import {PackageNotFoundException, SoapConnectionError} from '../util/exceptions';
 
+function errorResponse(err, res) {
+  if (err instanceof PackageNotFoundException) {
+    res.json({
+      status: 'wrong',
+      message: 'Paquete no encontrado'
+    });
+  } else if (err instanceof SoapConnectionError) {
+    res.json({
+      status: 'wrong',
+      message: 'Problemas de conexión con el servidor'
+    });
+  } else {
+    stream.error(err);
+    res.status(500).send({ error: 'Unexpected error' });
+  }
+}
+
 export default function (app) {
 
   app.use(function (req, res, next) {
@@ -11,23 +28,6 @@ export default function (app) {
     stream.debug(`GET params: ${JSON.stringify(req.query)}`);
     next();
   });
-
-  const errorResponse = function (err, res) {
-    if (err instanceof PackageNotFoundException) {
-      res.json({
-        status: 'wrong',
-        message: 'Paquete no encontrado'
-      });
-    } else if (err instanceof SoapConnectionError) {
-      res.json({
-        status: 'wrong',
-        message: 'Problemas de conexión con el servidor'
-      });
-    } else {
-      stream.error(err);
-      res.status(500).send({ error: 'Unexpected error' });
-    }
-  };
 
   app.post('/subscribe', (req, res) => {
     const emailSubscribe = req.body.email;

@@ -51,13 +51,44 @@ export default React.createClass({
           });
           setTimeout(function() {
             self.setState({showSubscribedDone: false});
-          }, 5000);
+          }, 10000);
           self.props.setWorking(false);
         });
       });
     }
   },
   render() {
+    const self = this;
+    const disabled = (self.props.parentIsWorking || self.state.loading);
+    const formSection = function() {
+      if (self.state.showSubscribedDone) {
+        return (
+          <div className="mdl-card__supporting-text red-text">
+            <p><strong>Ha comenzado el proceso de suscripción. Revisá tu casilla de correo y confirmá la suscripción en el email recibido.</strong></p>
+          </div>
+        );
+      } else {
+        return (
+          <form action="/tracker" method="post" onSubmit={self.subscribeToUpdates}>
+            <div className="mdl-card__supporting-text">
+              <fieldset>
+                <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                  <Label htmlFor="email" text="Email" />
+                  <Input name="email" type="email" required={true} onChange={self.changeEmail} />
+                </div>
+                <label htmlFor="receiveMoreInfo" className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                  <input type="checkbox" id="receiveMoreInfo" name="receiveMoreInfo" value="receive" className="mdl-checkbox__input" onChange={self.changeReceiveMoreInfo} />
+                  <span className="mdl-checkbox__label">Suscribirse a newsletter con información de productos interesantes.</span>
+                </label>
+              </fieldset>
+            </div>
+            <div className="mdl-card__actions mdl-card--border">
+              <Button type="submit" text="Suscribir" disabled={disabled}/>
+            </div>
+          </form>
+        );
+      }
+    }();
     return (
       <div className="mdl-card mdl-cell mdl-cell--12-col mdl-shadow--4dp">
         <div className="mdl-card__supporting-text">
@@ -68,23 +99,7 @@ export default React.createClass({
             El servidor se encargará de consultar tu encomienda frecuentemente y te enviará un email ante algún cambio.
           </p>
         </div>
-        <form action="/tracker" method="post" onSubmit={this.subscribeToUpdates}>
-          <div className="mdl-card__supporting-text">
-            <fieldset>
-              <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <Label htmlFor="email" text="Email" />
-                <Input name="email" type="email" required={true} onChange={this.changeEmail} />
-              </div>
-              <label htmlFor="receiveMoreInfo" className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
-                <input type="checkbox" id="receiveMoreInfo" name="receiveMoreInfo" value="receive" className="mdl-checkbox__input" onChange={this.changeReceiveMoreInfo} />
-                <span className="mdl-checkbox__label">Suscribirse a newsletter con información de productos interesantes.</span>
-              </label>
-            </fieldset>
-          </div>
-          <div className="mdl-card__actions mdl-card--border">
-            <Button type="submit" text="Suscribir" />
-          </div>
-        </form>
+        {formSection}
       </div>
     );
   },

@@ -61,3 +61,7 @@ section {
 .full-width {
   width:100%;
 }
+
+.red-text {
+  color: red;
+}

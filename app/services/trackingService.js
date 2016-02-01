@@ -30,6 +30,7 @@ export default {
         }
 
         const root = data.Tracking_PiezaResponse.Tracking_PiezaResult[1];
+        stream.debug(`tracking information to parse: ${JSON.stringify(root)}`);
         if (!root.diffgram) {
           return when.reject(new PackageNotFoundException('Oca Package not found', trackingData));
         }

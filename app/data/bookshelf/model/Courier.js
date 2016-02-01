@@ -13,7 +13,14 @@ class Oca {
   }
 
   adaptResult(data) {
-    return data.diffgram.NewDataSet.map((array) => {
+    const packageHistory = function() {
+      if (!Array.isArray(data.diffgram.NewDataSet)) {
+        return [data.diffgram.NewDataSet];
+      }
+      return data.diffgram.NewDataSet;
+    }();
+
+    return packageHistory.map((array) => {
       let estado = _.find(array.Table, (obj) => {
         return _.has(obj, 'Desdcripcion_Estado');
       }).Desdcripcion_Estado;

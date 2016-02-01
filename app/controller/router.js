@@ -49,6 +49,22 @@ export default function (app) {
   });
 
   app.post(urlMap.tracker, function (req, res) {
+    const courierOptions = _.map(Courier.list(), (courierData) => {
+      return courierData.value;
+    });
+    req.checkBody('courier', 'Debe elegir un transporte').notEmpty();
+    req.checkBody('courier', 'El transpore elegido no corresponde a las opciones posibles').matches({options: courierOptions});
+
+    const errors = req.validationErrors();
+    if (errors) {
+      res.json({
+        status: 'wrong',
+        message: _.map(errors, (err) => {
+          return err.msg;
+        }).join('. ')
+      });
+      return;
+    }
     let courier = req.body.courier;
     let trackingData = req.body.trackingData;
     trackingService.trackPackage(courier, trackingData)

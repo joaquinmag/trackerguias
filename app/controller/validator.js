@@ -4,8 +4,8 @@ import Courier from '../data/bookshelf/model/Courier';
 export default function () {
   return expressValidator({
     customValidators: {
-      isTrackingDataValid: function (value) {
-        return Courier.isTrackingDataValid(value);
+      isValidTrackingData: function (value) {
+        return Courier.isValidTrackingData(value);
       }
     }
   });

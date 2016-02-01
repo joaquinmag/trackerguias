@@ -15,7 +15,7 @@ export default class Courier {
       }
     ];
   }
-  isTrackingDataValid(trackingData) {
+  isValidTrackingData(trackingData) {
     // TODO check if tracking data is valid depending on the courier type
     return true;
   }

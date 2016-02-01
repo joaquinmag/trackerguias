@@ -37,9 +37,6 @@ export default {
       });
   },
   subscribeEmail(email, receiveMoreInfo, packageInformation) {
-    packageInformation.toString = () => {
-      return packageInformation.trackingData.packageId;
-    };
     return this.trackPackage(packageInformation.courier, packageInformation.trackingData)
     .then(() => {
       return emailManager.sendConfirmationEmail(email, packageInformation);

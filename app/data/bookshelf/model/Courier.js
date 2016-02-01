@@ -56,6 +56,10 @@ class Oca {
     };
   }
 
+  readableTrackingData(trackingData) {
+    return `${trackingData.packageId}`;
+  }
+
   callClient(soapClient, trackingData) {
     stream.debug(`calling client with trackingData: ${JSON.stringify(trackingData)}`);
     if (!trackingData) {

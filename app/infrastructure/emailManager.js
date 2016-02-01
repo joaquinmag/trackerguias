@@ -1,12 +1,14 @@
 import when from 'when';
 import mandrill from '../config/mandrill';
 import urlMap from '../controller/urlMappings';
+import Courier from '../data/bookshelf/model/Courier';
 
 export default {
   sendConfirmationEmail(email, packageInformation) {
     return when.promise((resolve, reject) => {
-      let template_name = 'confirm-subscription';
-      let message = {
+      const printablePackageInfo = Courier.buildCourier(packageInformation.courier).readableTrackingData(packageInformation.trackingData);
+      const template_name = 'confirm-subscription';
+      const message = {
         'to': [{
           'email': email,
           'type': 'to'
@@ -24,7 +26,7 @@ export default {
         'global_merge_vars': [
           {
             'name': 'encomienda',
-            'content': packageInformation.toString()
+            'content': printablePackageInfo
           },
           {
             'name': 'confirm_action_url',

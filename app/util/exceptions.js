@@ -10,3 +10,15 @@ export class SoapConnectionError {
     this.message = message;
   }
 }
+
+export class CourierNotFoundException {
+  constructor(message) {
+    this.message = message;
+  }
+}
+
+export class WrongTrackingDataException {
+  constructor(courier, trackingData) {
+    this.message = `trackingData: ${JSON.stringify(trackingData)} wrong for courier: ${courier}`;
+  }
+}

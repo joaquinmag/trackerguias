@@ -5,23 +5,6 @@ import {PackageNotFoundException, SoapConnectionError} from '../util/exceptions'
 import Courier from '../data/bookshelf/model/Courier';
 import urlMap from './urlMappings';
 
-function errorResponse(err, res) {
-  if (err instanceof PackageNotFoundException) {
-    res.json({
-      status: 'wrong',
-      message: 'Paquete no encontrado'
-    });
-  } else if (err instanceof SoapConnectionError) {
-    res.json({
-      status: 'wrong',
-      message: 'Problemas de conexión con el servidor'
-    });
-  } else {
-    stream.error(err);
-    res.status(500).send({ error: 'Unexpected error' });
-  }
-}
-
 export default function (app) {
 
   app.use(function (req, res, next) {
@@ -44,7 +27,20 @@ export default function (app) {
       });
     })
     .catch((err) => {
-      errorResponse(err, res);
+      if (err instanceof PackageNotFoundException) {
+        res.json({
+          status: 'wrong',
+          message: 'Paquete no encontrado'
+        });
+      } else if (err instanceof SoapConnectionError) {
+        res.json({
+          status: 'wrong',
+          message: 'Problemas de conexión con el servidor'
+        });
+      } else {
+        stream.error(err);
+        res.status(500).send({ error: 'Unexpected error' });
+      }
     });
   });
 
@@ -53,7 +49,9 @@ export default function (app) {
       return courierData.value;
     });
     req.checkBody('courier', 'Debe elegir un transporte').notEmpty();
-    req.checkBody('courier', 'El transpore elegido no corresponde a las opciones posibles').matches({options: courierOptions});
+    req.checkBody('courier', 'El transpore elegido no corresponde a las opciones posibles')
+      .matches({options: courierOptions});
+    req.checkBody('trackingData', 'Debe ingresar la información del paquete').notEmpty();
 
     const errors = req.validationErrors();
     if (errors) {
@@ -77,7 +75,20 @@ export default function (app) {
         });
       })
     .catch((err) => {
-      errorResponse(err, res);
+      if (err instanceof PackageNotFoundException) {
+        res.json({
+          status: 'wrong',
+          message: 'Paquete no encontrado'
+        });
+      } else if (err instanceof SoapConnectionError) {
+        res.json({
+          status: 'wrong',
+          message: 'Problemas de conexión con el servidor'
+        });
+      } else {
+        stream.error(err);
+        res.status(500).send({ error: 'Unexpected error' });
+      }
     });
   });
 

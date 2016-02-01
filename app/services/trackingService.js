@@ -3,6 +3,7 @@
 import easysoap from 'easysoap';
 import {stream} from '../util/logger';
 import _ from 'lodash';
+import when from 'when';
 import {PackageNotFoundException, SoapConnectionError} from '../util/exceptions';
 import emailManager from '../infraestructure/emailManager';
 import Courier from '../data/bookshelf/model/Courier';
@@ -10,6 +11,7 @@ import Courier from '../data/bookshelf/model/Courier';
 export default {
   trackPackage(courierName, trackingData) {
     const courier = Courier.buildCourier(courierName);
+    stream.debug(`courier built for name: ${courierName}`);
     return courier.callClient(easysoap, trackingData)
       .then((data) => {
         stream.debug("data received from client called.");
@@ -24,12 +26,12 @@ export default {
             return 'Soap Fault with no faultstring available';
           }());
           stream.error(JSON.stringify(faultstring));
-          throw new SoapConnectionError(faultstring);
+          return when.reject(new SoapConnectionError(faultstring));
         }
 
         const root = data.Tracking_PiezaResponse.Tracking_PiezaResult[1];
         if (!root.diffgram) {
-          throw new PackageNotFoundException('Oca Package not found', trackingData);
+          return when.reject(new PackageNotFoundException('Oca Package not found', trackingData));
         }
         return courier.adaptResult(root);
       });

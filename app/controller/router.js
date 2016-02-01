@@ -1,7 +1,7 @@
 import trackingService from '../services/trackingService';
 import {stream} from '../util/logger';
 import _ from 'lodash';
-import {PackageNotFoundException, SoapConnectionError} from '../util/exceptions';
+import {PackageNotFoundException, SoapConnectionError, CourierNotFoundException, WrongTrackingDataException} from '../util/exceptions';
 import Courier from '../data/bookshelf/model/Courier';
 import urlMap from './urlMappings';
 
@@ -68,7 +68,7 @@ export default function (app) {
     trackingService.trackPackage(courier, trackingData)
     .then(
       (data) => {
-        stream.debug(data);
+        stream.debug(JSON.stringify(data));
         res.json({
           status: 'ok',
           data: data
@@ -78,15 +78,25 @@ export default function (app) {
       if (err instanceof PackageNotFoundException) {
         res.json({
           status: 'wrong',
-          message: 'Paquete no encontrado'
+          message: 'Paquete no encontrado.'
         });
       } else if (err instanceof SoapConnectionError) {
         res.json({
           status: 'wrong',
-          message: 'Problemas de conexión con el servidor'
+          message: 'Problemas de conexión con el servidor.'
+        });
+      } else if (err instanceof WrongTrackingDataException) {
+        res.json({
+          status: 'wrong',
+          message: 'Los datos del paquete no han sido ingresados correctamente.'
+        });
+      } else if (err instanceof CourierNotFoundException) {
+        res.json({
+          status: 'wrong',
+          message: 'Información del transporte no encontrada.'
         });
       } else {
-        stream.error(err);
+        stream.error(JSON.stringify(err));
         res.status(500).send({ error: 'Unexpected error' });
       }
     });

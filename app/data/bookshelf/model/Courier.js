@@ -1,5 +1,7 @@
 import _ from 'lodash';
 import moment from 'moment';
+import {stream} from '../../../util/logger';
+import when from 'when';
 import {CourierNotFoundException, WrongTrackingDataException} from '../../../util/exceptions';
 
 class Oca {
@@ -55,16 +57,18 @@ class Oca {
   }
 
   callClient(soapClient, trackingData) {
+    stream.debug(`calling client with trackingData: ${JSON.stringify(trackingData)}`);
     if (!trackingData) {
-      throw new Error(`trackingData should be defined: ${trackingData}`);
+      return when.reject(new Error('trackingData should be defined'));
     }
     if (!trackingData.packageId) {
-      throw new WrongTrackingDataException(this.courier, trackingData);
+      return when.reject(new WrongTrackingDataException(this.courier, trackingData));
     }
 
     const self = this;
     const packageId = trackingData.packageId;
-    return soapClient.createClient(self.getConnectionSettings()).call({
+    return soapClient.createClient(self.getConnectionSettings())
+    .call({
       method: 'Tracking_Pieza',
       attributes: {
         xmlns: '#Oca_e_Pak'
@@ -74,7 +78,7 @@ class Oca {
       }
     }).then((result) => {
       if (!result) {
-        throw new Error('result should be initialized');
+        throw new Error('result should be defined');
       }
       return result.data;
     });

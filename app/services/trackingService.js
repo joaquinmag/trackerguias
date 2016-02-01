@@ -12,6 +12,7 @@ export default {
     const courier = Courier.buildCourier(courierName);
     return courier.callClient(easysoap, trackingData)
       .then((data) => {
+        stream.debug("data received from client called.");
         if (data && data.Fault) {
           const faultstring = (function () {
             const faultData = _.find(data.Fault, (obj) => {
@@ -22,11 +23,11 @@ export default {
             }
             return 'Soap Fault with no faultstring available';
           }());
-          stream.error(faultstring);
+          stream.error(JSON.stringify(faultstring));
           throw new SoapConnectionError(faultstring);
         }
 
-        let root = data.Tracking_PiezaResponse.Tracking_PiezaResult[1];
+        const root = data.Tracking_PiezaResponse.Tracking_PiezaResult[1];
         if (!root.diffgram) {
           throw new PackageNotFoundException('Oca Package not found', trackingData);
         }

@@ -5,7 +5,7 @@ import {stream} from '../util/logger';
 import _ from 'lodash';
 import when from 'when';
 import {PackageNotFoundException, SoapConnectionError} from '../util/exceptions';
-import emailManager from '../infraestructure/emailManager';
+import emailManager from '../infrastructure/emailManager';
 import Courier from '../data/bookshelf/model/Courier';
 
 export default {

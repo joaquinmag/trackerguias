@@ -3,6 +3,7 @@ import {stream} from '../util/logger';
 import _ from 'lodash';
 import {PackageNotFoundException, SoapConnectionError} from '../util/exceptions';
 import Courier from '../data/bookshelf/model/Courier';
+import urlMap from './urlMappings';
 
 function errorResponse(err, res) {
   if (err instanceof PackageNotFoundException) {
@@ -30,7 +31,7 @@ export default function (app) {
     next();
   });
 
-  app.post('/subscribe', (req, res) => {
+  app.post(urlMap.subscribe, (req, res) => {
     const emailSubscribe = req.body.email;
     const receiveMoreInfo = req.body.receiveMoreInfo;
     const packageInformation = req.body.packageInformation;
@@ -47,7 +48,7 @@ export default function (app) {
     });
   });
 
-  app.post('/tracker', function (req, res) {
+  app.post(urlMap.tracker, function (req, res) {
     let courier = req.body.courier;
     let trackingData = req.body.trackingData;
     trackingService.trackPackage(courier, trackingData)

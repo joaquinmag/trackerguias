@@ -1,5 +1,6 @@
 import when from 'when';
 import mandrill from '../config/mandrill';
+import urlMap from '../controller/urlMappings';
 
 export default {
   sendConfirmationEmail(email, packageInformation) {
@@ -27,7 +28,7 @@ export default {
           },
           {
             'name': 'confirm_action_url',
-            'content': 'http://localhost:3000/confirm-subscription'
+            'content': 'http://localhost:3000' + urlMap.confirmSubscription
           }
         ],
         'tags': [

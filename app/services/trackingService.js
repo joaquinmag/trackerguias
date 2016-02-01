@@ -5,7 +5,7 @@ import {stream} from '../util/logger';
 import _ from 'lodash';
 import when from 'when';
 import {PackageNotFoundException, SoapConnectionError} from '../util/exceptions';
-import emailManager from '../infrastructure/emailManager';
+import EmailManager from '../infrastructure/emailManager';
 import Courier from '../data/bookshelf/model/Courier';
 
 export default {
@@ -14,7 +14,7 @@ export default {
     stream.debug(`courier built for name: ${courierName}`);
     return courier.callClient(easysoap, trackingData)
       .then((data) => {
-        stream.debug("data received from client called.");
+        stream.debug('data received from client called.');
         if (data && data.Fault) {
           const faultstring = (function () {
             const faultData = _.find(data.Fault, (obj) => {
@@ -39,6 +39,7 @@ export default {
   subscribeEmail(email, receiveMoreInfo, packageInformation) {
     return this.trackPackage(packageInformation.courier, packageInformation.trackingData)
     .then(() => {
+      const emailManager = new EmailManager();
       return emailManager.sendConfirmationEmail(email, packageInformation);
     });
   }

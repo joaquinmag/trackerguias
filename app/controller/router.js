@@ -4,6 +4,7 @@ import _ from 'lodash';
 import {PackageNotFoundException, SoapConnectionError, CourierNotFoundException, WrongTrackingDataException} from '../util/exceptions';
 import Courier from '../data/bookshelf/model/Courier';
 import urlMap from './urlMappings';
+import EmailManager from '../infrastructure/emailManager';
 
 export default function (app) {
 
@@ -18,6 +19,8 @@ export default function (app) {
     const emailSubscribe = req.body.email;
     const receiveMoreInfo = req.body.receiveMoreInfo;
     const packageInformation = req.body.packageInformation;
+
+    EmailManager.initialize(req.hostname, app.get('port'));
 
     trackingService.subscribeEmail(emailSubscribe, receiveMoreInfo, packageInformation)
     .then(() => {

@@ -3,10 +3,18 @@ import mandrill from '../config/mandrill';
 import urlMap from '../controller/urlMappings';
 import Courier from '../data/bookshelf/model/Courier';
 
-export default {
+export default class EmailManager {
+  static initialize(hostname, port) {
+    EmailManager.hostname = hostname;
+    EmailManager.port = port;
+  }
+
   sendConfirmationEmail(email, packageInformation) {
     return when.promise((resolve, reject) => {
-      const printablePackageInfo = Courier.buildCourier(packageInformation.courier).readableTrackingData(packageInformation.trackingData);
+      const hostname = EmailManager.hostname;
+      const port = EmailManager.port;
+      const printablePackageInfo = Courier.buildCourier(packageInformation.courier)
+        .readableTrackingData(packageInformation.trackingData);
       const template_name = 'confirm-subscription';
       const message = {
         'to': [{
@@ -30,7 +38,7 @@ export default {
           },
           {
             'name': 'confirm_action_url',
-            'content': 'http://localhost:3000' + urlMap.confirmSubscription
+            'content': `http://${hostname}:${port}${urlMap.confirmSubscription}`
           }
         ],
         'tags': [
@@ -48,4 +56,4 @@ export default {
       }, resolve, reject);
     });
   }
-};
+}

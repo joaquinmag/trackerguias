@@ -8,6 +8,9 @@ export const handlebarsHelpers = {
         action = options.inverse(variable);
       }
       return action;
+    },
+    json: function (variable) {
+      return JSON.stringify(variable);
     }
   }
 };

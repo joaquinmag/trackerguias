@@ -7,6 +7,9 @@ import SubscribeForm from './SubscribeForm.jsx';
 
 export default React.createClass({
   displayName: 'Tracker',
+  propTypes: {
+    couriers: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
+  },
   getInitialState () {
     return {
       isWorking: false,
@@ -66,7 +69,7 @@ export default React.createClass({
         				Cualquier sugerencia/problema indicarlo <a href="https://github.com/joaquinmag/trackerguias/issues" target="_blank">aquí</a>
         			</p>
         		</div>
-            <Lookup setWorking={this.setWorking} parentIsWorking={this.state.working} updateTrackingInformation={this.handleTrackingUpdate} onTrackingRequestUpdate={this.handleTrackingRequestUpdate} />
+            <Lookup couriers={this.props.couriers} setWorking={this.setWorking} parentIsWorking={this.state.working} updateTrackingInformation={this.handleTrackingUpdate} onTrackingRequestUpdate={this.handleTrackingRequestUpdate} />
           </div>
         </section>
         <section className="section--center mdl-grid">

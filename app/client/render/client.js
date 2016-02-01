@@ -5,8 +5,8 @@ import Tracker from '../components/tracker/Tracker.jsx';
 let trackerGuias = window.trackerGuias || {};
 
 trackerGuias.home = {
-  render: function () {
-    ReactDOM.render(<Tracker />, document.getElementById('home-container'));
+  render: function (couriers) {
+    ReactDOM.render(<Tracker couriers={couriers} />, document.getElementById('home-container'));
   }
 };
 

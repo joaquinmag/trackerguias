@@ -10,6 +10,7 @@ import {TrackerActions} from './TrackerActions';
 export default React.createClass({
   displayName: 'Lookup',
   propTypes: {
+    couriers: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
     updateTrackingInformation: React.PropTypes.func.isRequired,
     onTrackingRequestUpdate: React.PropTypes.func.isRequired,
     setWorking: React.PropTypes.func,
@@ -66,20 +67,7 @@ export default React.createClass({
     }
   },
   render() {
-    var options = [
-      {
-        label: "OCA",
-        value: "oca"
-      },
-      {
-        label: "BusPack",
-        value: "buspack"
-      },
-      {
-        label: "Via Cargo",
-        value: "via-cargo"
-      }
-    ];
+    const options = this.props.couriers;
     const disabled = (this.props.parentIsWorking || this.state.loading);
     return (
       <form action="/tracker" method="post" onSubmit={this.lookupTrackingInformation}>

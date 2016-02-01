@@ -2,6 +2,7 @@ import trackingService from '../services/trackingService';
 import {stream} from '../util/logger';
 import _ from 'lodash';
 import {PackageNotFoundException, SoapConnectionError} from '../util/exceptions';
+import Courier from '../data/bookshelf/model/Courier';
 
 function errorResponse(err, res) {
   if (err instanceof PackageNotFoundException) {
@@ -64,7 +65,10 @@ export default function (app) {
   });
 
   app.get('/', function (req, res) {
-    res.render('index', { title: 'Seguimiento de encomiendas' });
+    res.render('index', {
+      title: 'Seguimiento de encomiendas',
+      couriers: Courier.list()
+    });
   });
 
   // 404 Error handling

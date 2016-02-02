@@ -8,6 +8,7 @@ import {PackageNotFoundException, SoapConnectionError} from '../util/exceptions'
 import EmailManager from '../infrastructure/emailManager';
 import CryptoManager from '../infrastructure/cryptoManager';
 import Courier from '../data/bookshelf/model/Courier';
+import Tracking from '../data/bookshelf/model/Tracking';
 
 export default {
   trackPackage(courierName, trackingData) {
@@ -51,6 +52,18 @@ export default {
 
       const emailManager = new EmailManager();
       return emailManager.sendConfirmationEmail(email, packageInformation, encryptedData);
+    });
+  },
+  confirmSubscription(email, receiveMoreInfo, packageInformation) {
+    return Tracking.save({
+      email: email,
+      receiveMoreInfo: receiveMoreInfo,
+      courier: packageInformation.courier,
+      trackingData: packageInformation.trackingData
+    })
+    .then(() => {
+      return Courier.buildCourier(packageInformation.courier)
+        .readableTrackingData(packageInformation.trackingData);
     });
   }
 };

@@ -5,22 +5,20 @@
 
 export function up(knex, Promise) {
   return Promise.all([
-    knex.schema.createTable('Thing', function (table) {
-      table.bigIncrements('id').primary().unsigned();
-      table.string('name', 50);
-      table.biginteger('user_id').unsigned().index().references('id').inTable('User');
-    }),
-    knex.schema.createTable('User', function (table) {
-      table.bigIncrements('id').primary().unsigned();
-      table.string('name', 50);
-      table.string('password', 255);
+    knex.schema.createTable('trackings', function (table) {
+      table.increments('id').primary().unsigned();
+      table.string('courier', 255).notNullable();
+      table.string('email', 255).notNullable();
+      table.boolean('marketing').notNullable();
+      table.string('trackingData', 255).notNullable();
+      table.dateTime('created').notNullable();
+      table.dateTime('updated').notNullable();
     })
   ]);
 }
 
 export function down(knex, Promise) {
   return Promise.all([
-    knex.schema.dropTable('User'),
-    knex.schema.dropTable('Thing')
+    knex.schema.dropTable('trackings')
   ]);
 }

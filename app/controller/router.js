@@ -1,7 +1,12 @@
 import trackingService from '../services/trackingService';
 import {stream} from '../util/logger';
 import _ from 'lodash';
-import {PackageNotFoundException, SoapConnectionError, CourierNotFoundException, WrongTrackingDataException} from '../util/exceptions';
+import {
+  PackageNotFoundException,
+  SoapConnectionError,
+  CourierNotFoundException,
+  WrongTrackingDataException
+} from '../util/exceptions';
 import Courier from '../data/bookshelf/model/Courier';
 import urlMap from './urlMappings';
 import EmailManager from '../infrastructure/emailManager';
@@ -51,9 +56,24 @@ export default function (app) {
     let encrypted = req.params.encrypted;
     let CryptoManager = require('../infrastructure/cryptoManager.js');
     let cryptoManager = new CryptoManager();
-    const decrypted = cryptoManager.decrypt(encrypted);
-    stream.debug(decrypted);
-    res.send(`my decrypted: ${decrypted}`);
+    const confirmationData = JSON.parse(cryptoManager.decrypt(encrypted));
+    const email = confirmationData.email;
+    const receiveMoreInfo = confirmationData ? true : false;
+    const packageInformation = confirmationData.packageInformation;
+    trackingService.confirmSubscription(email, receiveMoreInfo, packageInformation)
+    .then((packageData) => {
+      res.render('subscriptionConfirmed', {
+        title: 'Suscripción confirmada',
+        email: email,
+        packageData: packageData
+      });
+    })
+    .catch((err) => {
+      stream.error(`error thrown confirming subscription: ${err}`);
+      res.render('error', {
+        message: 'No se ha podido suscribir a los cambios.'
+      });
+    });
   });
 
   app.post(urlMap.tracker, function (req, res) {

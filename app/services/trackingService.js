@@ -6,6 +6,7 @@ import _ from 'lodash';
 import when from 'when';
 import {PackageNotFoundException, SoapConnectionError} from '../util/exceptions';
 import EmailManager from '../infrastructure/emailManager';
+import CryptoManager from '../infrastructure/cryptoManager';
 import Courier from '../data/bookshelf/model/Courier';
 
 export default {
@@ -40,8 +41,16 @@ export default {
   subscribeEmail(email, receiveMoreInfo, packageInformation) {
     return this.trackPackage(packageInformation.courier, packageInformation.trackingData)
     .then(() => {
+
+      let cryptoManager = new CryptoManager();
+      const encryptedData = cryptoManager.encrypt(JSON.stringify({
+        email: email,
+        receiveMoreInfo: receiveMoreInfo,
+        packageInformation: packageInformation
+      }));
+
       const emailManager = new EmailManager();
-      return emailManager.sendConfirmationEmail(email, packageInformation);
+      return emailManager.sendConfirmationEmail(email, packageInformation, encryptedData);
     });
   }
 };

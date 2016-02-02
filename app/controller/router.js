@@ -47,6 +47,15 @@ export default function (app) {
     });
   });
 
+  app.get(`${urlMap.confirmSubscription}/:encrypted`, (req, res) => {
+    let encrypted = req.params.encrypted;
+    let CryptoManager = require('../infrastructure/cryptoManager.js');
+    let cryptoManager = new CryptoManager();
+    const decrypted = cryptoManager.decrypt(encrypted);
+    stream.debug(decrypted);
+    res.send(`my decrypted: ${decrypted}`);
+  });
+
   app.post(urlMap.tracker, function (req, res) {
     const courierOptions = _.map(Courier.list(), (courierData) => {
       return courierData.value;

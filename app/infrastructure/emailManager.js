@@ -9,7 +9,7 @@ export default class EmailManager {
     EmailManager.port = port;
   }
 
-  sendConfirmationEmail(email, packageInformation) {
+  sendConfirmationEmail(email, packageInformation, encryptedParameter) {
     return when.promise((resolve, reject) => {
       const hostname = EmailManager.hostname;
       const port = EmailManager.port;
@@ -38,7 +38,7 @@ export default class EmailManager {
           },
           {
             'name': 'confirm_action_url',
-            'content': `http://${hostname}:${port}${urlMap.confirmSubscription}`
+            'content': `http://${hostname}:${port}${urlMap.confirmSubscription}/${encryptedParameter}`
           }
         ],
         'tags': [

@@ -58,7 +58,7 @@ export default function (app) {
     let cryptoManager = new CryptoManager();
     const confirmationData = JSON.parse(cryptoManager.decrypt(encrypted));
     const email = confirmationData.email;
-    const receiveMoreInfo = confirmationData ? true : false;
+    const receiveMoreInfo = confirmationData.receiveMoreInfo ? true : false;
     const packageInformation = confirmationData.packageInformation;
     trackingService.confirmSubscription(email, receiveMoreInfo, packageInformation)
     .then((packageData) => {

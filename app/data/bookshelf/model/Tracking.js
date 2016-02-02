@@ -25,6 +25,7 @@ export default class Tracking {
           courier: followTrackingData.courier,
           email: followTrackingData.email,
           marketing: followTrackingData.receiveMoreInfo,
+          expired: followTrackingData.expired,
           trackingData: JSON.stringify(followTrackingData.trackingData),
           updated: moment().utc().format()
         }).save();
@@ -41,6 +42,7 @@ export default class Tracking {
       courier: followTrackingData.courier,
       email: followTrackingData.email,
       marketing: followTrackingData.receiveMoreInfo,
+      expired: false,
       trackingData: JSON.stringify(followTrackingData.trackingData),
       updated: rightNow,
       created: rightNow
@@ -48,6 +50,7 @@ export default class Tracking {
     .then((savedTracking) => {
       followTrackingData.updated = savedTracking.get('updated');
       followTrackingData.created = savedTracking.get('created');
+      followTrackingData.expired = savedTracking.get('expired');
       return followTrackingData;
     });
   }

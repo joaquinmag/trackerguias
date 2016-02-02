@@ -1,7 +1,13 @@
 <section class="section--center mdl-grid">
   <div class="mdl-card mdl-cell mdl-cell--12-col mdl-shadow--4dp">
     <div class="mdl-card__title">
-      <h3 class="mdl-card__title-text">Oops! Algo ha ocurrido :(</h3>
+      <h3 class="mdl-card__title-text">
+        {{#exists errorTitle}}
+          {{this}}
+        {{else}}
+          Oops! Algo ha ocurrido :(
+        {{/exists}}
+      </h3>
     </div>
     <div class="mdl-card__supporting-text">
       <p>{{message}}</p>

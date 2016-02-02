@@ -70,9 +70,19 @@ export default function (app) {
     })
     .catch((err) => {
       stream.error(`error thrown confirming subscription: ${err}`);
-      res.render('error', {
-        message: 'No se ha podido suscribir a los cambios.'
-      });
+      if (err.code && err.code === 'ER_DUP_ENTRY') {
+        // conflict status
+        res.status(409).render('error', {
+          title: 'Ya se encuentra suscripto',
+          errorTitle: 'Esta dirección ya fue suscrita.',
+          message: ''
+        });
+      } else {
+        res.status(500).render('error', {
+          title: 'Ha ocurrido un error',
+          message: 'No se ha podido suscribir a los cambios.'
+        });
+      }
     });
   });
 

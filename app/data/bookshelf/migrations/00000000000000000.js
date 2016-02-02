@@ -13,6 +13,7 @@ export function up(knex, Promise) {
       table.string('trackingData', 255).notNullable();
       table.dateTime('created').notNullable();
       table.dateTime('updated').notNullable();
+      table.unique(['courier', 'trackingData', 'email']);
     })
   ]);
 }

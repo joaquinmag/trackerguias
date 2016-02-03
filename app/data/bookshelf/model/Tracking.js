@@ -3,7 +3,6 @@ import moment from 'moment';
 import Update from './Update';
 import OcaComparer from './comparers/OcaComparer';
 import {stream} from '../../../util/logger';
-import createError from 'create-error';
 import {ExpiredTrackingException, NoDifferencesException} from '../../../util/exceptions';
 
 let db;

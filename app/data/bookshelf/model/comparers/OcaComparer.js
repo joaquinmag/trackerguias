@@ -1,4 +1,3 @@
-import when from 'when';
 import moment from 'moment';
 
 export default class OcaComparer {

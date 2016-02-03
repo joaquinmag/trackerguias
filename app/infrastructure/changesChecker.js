@@ -1,9 +1,7 @@
-import when from 'when';
 import guard from 'when/guard';
 import parallel from 'when/parallel';
 import {stream} from '../util/logger';
 import Tracking from '../data/bookshelf/model/Tracking';
-import Update from '../data/bookshelf/model/Tracking';
 import trackingService from '../services/trackingService';
 import EmailManager from './emailManager';
 import {ExpiredTrackingException, NoDifferencesException} from '../util/exceptions';
@@ -11,14 +9,19 @@ import {ExpiredTrackingException, NoDifferencesException} from '../util/exceptio
 const minuteInMillis = 60 * 1000;
 
 function checkForChangesAndNotify(tracking) {
-  return trackingService.trackPackage(tracking.get('courier'), JSON.parse(tracking.get('trackingData')))
-  .then((newTrackingUpdates) => {
+  return trackingService.trackPackage(
+    tracking.get('courier'),
+    JSON.parse(tracking.get('trackingData'))
+  ).then((newTrackingUpdates) => {
     return Tracking.updateWithNewUpdates(tracking, newTrackingUpdates);
   })
   .then((differences) => {
-    stream.debug(`this are the differences for ${tracking.get('trackingData')} : ${JSON.stringify(differences)}`);
+    stream.debug(`${tracking.get('trackingData')} diff: ${JSON.stringify(differences)}`);
     const emailManager = new EmailManager();
-    return emailManager.sendNewDifferences(tracking.get('email'), JSON.parse(tracking.get('trackingData')), differences);
+    return emailManager.sendNewDifferences(
+        tracking.get('email'),
+        JSON.parse(tracking.get('trackingData')
+      ), differences);
   })
   .catch((err) => {
     if (err instanceof NoDifferencesException) {

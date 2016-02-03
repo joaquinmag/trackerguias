@@ -1,6 +1,7 @@
 import dbg from 'debug';
 import app from './../../app';
 import http from 'http';
+import startChangesChecker from '../infrastructure/changesChecker';
 
 const debug = dbg('nerd-stack:server');
 const port = normalizePort(process.env.PORT || '3000');
@@ -67,3 +68,5 @@ function onListening() {
 process.on('SIGTERM', function () {
   server.close();
 });
+
+startChangesChecker();

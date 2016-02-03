@@ -23,6 +23,9 @@ export const logger = new winston.Logger({
 });
 
 export const stream = {
+  info: function (message) {
+    logger.info(message);
+  },
   write: function (message) {
     logger.info(message);
   },

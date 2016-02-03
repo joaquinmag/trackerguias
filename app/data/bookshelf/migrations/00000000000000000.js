@@ -15,12 +15,22 @@ export function up(knex, Promise) {
       table.dateTime('updated').notNullable();
       table.boolean('expired').notNullable();
       table.unique(['courier', 'trackingData', 'email']);
+    }),
+    knex.schema.createTable('updates', function (table) {
+      table.increments('id').primary().unsigned();
+      table.datetime('fecha').notNullable();
+      table.string('estado', 255).notNullable();
+      table.string('sucursal', 255).notNullable();
+      table.string('motivo').notNullable();
+      table.integer('trackingId').notNullable().unsigned().index().references('id').inTable('trackings');
+      table.datetime('created').notNullable();
     })
   ]);
 }
 
 export function down(knex, Promise) {
   return Promise.all([
+    knex.schema.dropTable('updates'),
     knex.schema.dropTable('trackings')
   ]);
 }

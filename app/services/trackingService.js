@@ -9,6 +9,7 @@ import EmailManager from '../infrastructure/emailManager';
 import CryptoManager from '../infrastructure/cryptoManager';
 import Courier from '../data/bookshelf/model/Courier';
 import Tracking from '../data/bookshelf/model/Tracking';
+import Update from '../data/bookshelf/model/Update';
 
 export default {
   trackPackage(courierName, trackingData) {
@@ -55,13 +56,24 @@ export default {
     });
   },
   confirmSubscription(email, receiveMoreInfo, packageInformation) {
-    return Tracking.save({
-      email: email,
-      receiveMoreInfo: receiveMoreInfo,
-      courier: packageInformation.courier,
-      trackingData: packageInformation.trackingData
-    })
-    .then(() => {
+    const self = this;
+    return Tracking.startTransaction((transaction) => {
+      return when.join(
+        Tracking.save({
+          email: email,
+          receiveMoreInfo: receiveMoreInfo,
+          courier: packageInformation.courier,
+          trackingData: packageInformation.trackingData
+        }, transaction),
+        self.trackPackage(packageInformation.courier, packageInformation.trackingData)
+      ).then((joinedData) => {
+
+        const savedTracking = joinedData[0];
+        const trackingUpdates = joinedData[1];
+        return Update.saveUpdates(savedTracking.id, trackingUpdates, transaction);
+      });
+    }).
+    then(() => {
       return Courier.buildCourier(packageInformation.courier)
         .readableTrackingData(packageInformation.trackingData);
     });

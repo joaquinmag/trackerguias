@@ -103,7 +103,7 @@ export default class Courier {
       return courierData.value === courierValue;
     });
     if (!actualCourier) {
-      throw new CourierNotFoundException(`isTrackingDataValid${courierValue} not found`);
+      throw new CourierNotFoundException(`courierValue ${courierValue} not found`);
     }
     if (actualCourier.value === 'oca') {
       return new Oca();

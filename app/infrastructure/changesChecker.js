@@ -20,8 +20,9 @@ function checkForChangesAndNotify(tracking) {
     const emailManager = new EmailManager();
     return emailManager.sendNewDifferences(
         tracking.get('email'),
-        JSON.parse(tracking.get('trackingData')
-      ), differences);
+        tracking.get('courier'),
+        JSON.parse(tracking.get('trackingData')),
+        differences);
   })
   .catch((err) => {
     if (err instanceof NoDifferencesException) {
@@ -36,7 +37,7 @@ function checkForChangesAndNotify(tracking) {
 }
 
 export default function () {
-  setTimeout(() => {
+  setInterval(() => {
     stream.info('starting changes checker interval');
 
     Tracking.fetchNonExpired()
@@ -60,5 +61,5 @@ export default function () {
     });
 
     stream.info('finishing changes checker interval');
-  }, 1000);
+  }, 30* 1000);
 }

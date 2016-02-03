@@ -6,6 +6,7 @@ import Tracking from '../data/bookshelf/model/Tracking';
 import Update from '../data/bookshelf/model/Tracking';
 import trackingService from '../services/trackingService';
 import EmailManager from './emailManager';
+import {ExpiredTrackingException, NoDifferencesException} from '../util/exceptions';
 
 const minuteInMillis = 60 * 1000;
 
@@ -20,17 +21,19 @@ function checkForChangesAndNotify(tracking) {
     return emailManager.sendNewDifferences(tracking.get('email'), JSON.parse(tracking.get('trackingData')), differences);
   })
   .catch((err) => {
-    if (err.code && (err.code === 'EXPIRED' || err.code === 'NO_DIFF')) {
-      stream.debug(`error catched, ${err}`);
-      if (err.code == 'EXPIRED') {
-        stream.info(`tracking expired, ${tracking.get('trackingData')}`);
-      }
+    if (err instanceof NoDifferencesException) {
+      stream.debug(`NoDifferencesException caught, ${err}`);
+      return;
+    } else if (err instanceof ExpiredTrackingException) {
+      stream.info(`tracking expired, ${tracking.get('trackingData')}`);
+      return;
     }
+    throw err;
   });
 }
 
 export default function () {
-  setInterval(() => {
+  setTimeout(() => {
     stream.info('starting changes checker interval');
 
     Tracking.fetchNonExpired()
@@ -50,9 +53,9 @@ export default function () {
       stream.info(`finished checking ${results.length}`);
     })
     .catch((err) => {
-      stream.error(`error checking changes ${err}, ${JSON.stringify(err)}`);
+      stream.error(`error checking changes ${err}`);
     });
 
     stream.info('finishing changes checker interval');
-  }, 30*1000);
+  }, 1000);
 }

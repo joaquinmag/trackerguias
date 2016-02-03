@@ -1,7 +1,10 @@
+import when from 'when';
 import moment from 'moment';
 import Update from './Update';
 import OcaComparer from './comparers/OcaComparer';
 import {stream} from '../../../util/logger';
+import createError from 'create-error';
+import {ExpiredTrackingException, NoDifferencesException} from '../../../util/exceptions';
 
 let db;
 
@@ -28,21 +31,18 @@ export default class Tracking {
         .buildUpdatesComparer(tracking)
         .diffUpdates(newUpdates);
 
-      if (!differences) {
+      if (differences.length === 0) {
+        stream.debug(`Inside no differences for ${tracking.get('trackingData')}`);
         if (Update.isTrackingExpired(oldUpdates)) {
           return tracking.set({
             expired: true,
             updated: moment().utc().format()
           }).save()
           .then(() => {
-            let error = new Error('Expiring tracking');
-            error.code = 'EXPIRED';
-            return when.reject(error);
+            return when.reject(new ExpiredTrackingException());
           });
         }
-        let error = new Error('No differences in updates');
-        error.code = 'NO_DIFF';
-        return when.reject(error);
+        return when.reject(new NoDifferencesException());
       }
 
       return Tracking.startTransaction((transaction) => {

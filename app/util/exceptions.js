@@ -1,24 +1,17 @@
-export class PackageNotFoundException {
-  constructor(message, trackingData) {
-    this.message = message;
-    this.trackingData = trackingData;
-  }
-}
+import createError from 'create-error';
 
-export class SoapConnectionError {
-  consructor(message) {
-    this.message = message;
-  }
-}
+let PackageNotFoundException = createError('PackageNotFoundException');
+let SoapConnectionError = createError('SoapConnectionError');
+let CourierNotFoundException = createError('CourierNotFoundException');
+let WrongTrackingDataException = createError('WrongTrackingDataException');
+let ExpiredTrackingException = createError('ExpiredTrackingException');
+let NoDifferencesException = createError('NoDifferencesException');
 
-export class CourierNotFoundException {
-  constructor(message) {
-    this.message = message;
-  }
-}
-
-export class WrongTrackingDataException {
-  constructor(courier, trackingData) {
-    this.message = `trackingData: ${JSON.stringify(trackingData)} wrong for courier: ${courier}`;
-  }
-}
+export {
+  PackageNotFoundException,
+  SoapConnectionError,
+  CourierNotFoundException,
+  WrongTrackingDataException,
+  ExpiredTrackingException,
+  NoDifferencesException
+};

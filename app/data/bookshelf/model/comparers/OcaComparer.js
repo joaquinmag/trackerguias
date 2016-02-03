@@ -1,5 +1,5 @@
 import when from 'when';
-import moment from  'moment';
+import moment from 'moment';
 
 export default class OcaComparer {
 
@@ -11,7 +11,7 @@ export default class OcaComparer {
   diffUpdates(newUpdatesFromServer) {
     const self = this;
 
-    const fechaSort = ((a, b) => { // desc order. first the newest
+    function fechaSort(a, b) { // desc order. first the newest
       let returningValue = 0;
       if (a.fecha.isAfter(b.fecha)) {
         returningValue = -1;
@@ -19,14 +19,14 @@ export default class OcaComparer {
         returningValue = 1;
       }
       return returningValue;
-    });
+    }
 
     const normalizedOldUpdates = self.tracking.related('updates').map((trackingUpdate) => {
       return {
         fecha: moment(trackingUpdate.get('fecha')),
         estado: trackingUpdate.get('estado'),
         sucursal: trackingUpdate.get('sucursal'),
-        motivo: trackingUpdate.get('motivo'),
+        motivo: trackingUpdate.get('motivo')
       };
     }).sort(fechaSort);
     const normalizedNewUpdates = newUpdatesFromServer.map((trackingUpdate) => {
@@ -40,17 +40,17 @@ export default class OcaComparer {
 
     const lastDate = normalizedOldUpdates[0].fecha;
     const lastDateUpdates = normalizedOldUpdates.filter((update) => {
-      return (update.fecha.isSame(lastDate));
+      return update.fecha.isSame(lastDate);
     });
     return normalizedNewUpdates.filter((update) => {
       if (update.fecha.isAfter(lastDate.fecha)) {
         return true;
       } else if (update.fecha.isSame(lastDate.fecha)) {
-        return !(lastDateUpdates.find((lastDateUpdate) => {
-          update.estado == lastDateUpdate.estado &&
-          update.sucursal == lastDateUpdate.sucursal &&
-          update.motivo == lastDateUpdate.motivo
-        }));
+        return !lastDateUpdates.find((lastDateUpdate) => {
+          return update.estado === lastDateUpdate.estado &&
+            update.sucursal === lastDateUpdate.sucursal &&
+            update.motivo === lastDateUpdate.motivo;
+        });
       }
       return false;
     });

@@ -73,7 +73,7 @@ class Oca {
       return when.reject(new Error('trackingData should be defined'));
     }
     if (!trackingData.packageId) {
-      return when.reject(new WrongTrackingDataException(this.courier, trackingData));
+      return when.reject(new WrongTrackingDataException(`trackingData: ${JSON.stringify(trackingData)} wrong for courier: ${this.courier}`));
     }
 
     const self = this;

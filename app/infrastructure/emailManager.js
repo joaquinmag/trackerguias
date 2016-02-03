@@ -9,6 +9,10 @@ export default class EmailManager {
     EmailManager.port = port;
   }
 
+  sendNewDifferences(email, trackingData, differences) {
+    return when.resolve();
+  }
+
   sendConfirmationEmail(email, packageInformation, encryptedParameter) {
     return when.promise((resolve, reject) => {
       const hostname = EmailManager.hostname;

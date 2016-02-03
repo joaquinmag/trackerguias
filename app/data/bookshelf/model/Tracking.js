@@ -1,4 +1,7 @@
 import moment from 'moment';
+import Update from './Update';
+import OcaComparer from './comparers/OcaComparer';
+import {stream} from '../../../util/logger';
 
 let db;
 
@@ -15,6 +18,45 @@ export default class Tracking {
     });
     bookshelf.models.Trackings = bookshelf.Collection.extend({
       model: bookshelf.models.Tracking
+    });
+  }
+
+  static updateWithNewUpdates(tracking, newUpdates) {
+    return tracking.related('updates').fetch()
+    .then((oldUpdates) => {
+      const differences = Tracking
+        .buildUpdatesComparer(tracking)
+        .diffUpdates(newUpdates);
+
+      if (!differences) {
+        if (Update.isTrackingExpired(oldUpdates)) {
+          return tracking.set({
+            expired: true,
+            updated: moment().utc().format()
+          }).save()
+          .then(() => {
+            let error = new Error('Expiring tracking');
+            error.code = 'EXPIRED';
+            return when.reject(error);
+          });
+        }
+        let error = new Error('No differences in updates');
+        error.code = 'NO_DIFF';
+        return when.reject(error);
+      }
+
+      return Tracking.startTransaction((transaction) => {
+        return Update
+          .saveUpdates(tracking.get('id'), differences, transaction)
+          .then(() => {
+            return tracking.set({
+              updated: moment().utc().format()
+            }).save(null, {transacting: transaction});
+          });
+      })
+      .then(() => {
+        return differences;
+      });
     });
   }
 
@@ -63,7 +105,7 @@ export default class Tracking {
       trackingData: JSON.stringify(followTrackingData.trackingData),
       updated: rightNow,
       created: rightNow
-    }).save()
+    }).save(null, {transacting: transaction})
     .then((savedTracking) => {
       followTrackingData.id = savedTracking.get('id');
       followTrackingData.updated = savedTracking.get('updated');
@@ -71,6 +113,17 @@ export default class Tracking {
       followTrackingData.expired = savedTracking.get('expired');
       return followTrackingData;
     });
+  }
+
+  static buildUpdatesComparer(tracking) {
+    // TODO tracking is a bookshelf model, check it
+    const courierName = tracking.get('courier');
+    switch (courierName) {
+      case 'oca':
+        return new OcaComparer(tracking);
+      default:
+        throw new Error(`courierName ${courierName} not identified when building UpdatesComparer`);
+    }
   }
 
 }

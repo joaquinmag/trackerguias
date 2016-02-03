@@ -3,23 +3,29 @@ import guard from 'when/guard';
 import parallel from 'when/parallel';
 import {stream} from '../util/logger';
 import Tracking from '../data/bookshelf/model/Tracking';
+import Update from '../data/bookshelf/model/Tracking';
 import trackingService from '../services/trackingService';
+import EmailManager from './emailManager';
 
 const minuteInMillis = 60 * 1000;
 
 function checkForChangesAndNotify(tracking) {
-  stream.debug(JSON.stringify(tracking));
-  return when.join(
-    trackingService.trackPackage(tracking.get("courier"), JSON.parse(tracking.get("trackingData"))),
-    tracking.related('updates').fetch()
-  )
-  .then((joinedData) => {
-    const newTrackingUpdates = joinedData[0];
-    const lastTrackingUpdates = joinedData[1];
-    stream.debug(JSON.stringify(newTrackingUpdates));
-    stream.debug(JSON.stringify(lastTrackingUpdates));
-
-    return when.resolve();
+  return trackingService.trackPackage(tracking.get('courier'), JSON.parse(tracking.get('trackingData')))
+  .then((newTrackingUpdates) => {
+    return Tracking.updateWithNewUpdates(tracking, newTrackingUpdates);
+  })
+  .then((differences) => {
+    stream.debug(`this are the differences for ${tracking.get('trackingData')} : ${JSON.stringify(differences)}`);
+    const emailManager = new EmailManager();
+    return emailManager.sendNewDifferences(tracking.get('email'), JSON.parse(tracking.get('trackingData')), differences);
+  })
+  .catch((err) => {
+    if (err.code && (err.code === 'EXPIRED' || err.code === 'NO_DIFF')) {
+      stream.debug(`error catched, ${err}`);
+      if (err.code == 'EXPIRED') {
+        stream.info(`tracking expired, ${tracking.get('trackingData')}`);
+      }
+    }
   });
 }
 

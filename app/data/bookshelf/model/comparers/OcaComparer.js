@@ -1,4 +1,5 @@
 import moment from 'moment';
+import {stream} from '../../../../util/logger';
 
 export default class OcaComparer {
 
@@ -42,9 +43,10 @@ export default class OcaComparer {
       return update.fecha.isSame(lastDate);
     });
     return normalizedNewUpdates.filter((update) => {
-      if (update.fecha.isAfter(lastDate.fecha)) {
+      if (update.fecha.isAfter(lastDate)) {
         return true;
-      } else if (update.fecha.isSame(lastDate.fecha)) {
+      } else if (update.fecha.isSame(lastDate)) {
+        stream.debug(`update: ${update.fecha}, lastDate: ${lastDate}`);
         return !lastDateUpdates.find((lastDateUpdate) => {
           return update.estado === lastDateUpdate.estado &&
             update.sucursal === lastDateUpdate.sucursal &&

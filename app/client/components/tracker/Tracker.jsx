@@ -4,6 +4,7 @@ import React from 'react';
 import Lookup from './Lookup.jsx';
 import LookupResponse from './LookupResponse.jsx';
 import SubscribeForm from './SubscribeForm.jsx';
+import {WrongStatusException} from '../../exceptions';
 
 export default React.createClass({
   displayName: 'Tracker',
@@ -28,14 +29,12 @@ export default React.createClass({
         errorMessage: null
       });
     })
-    .catch(function (err) {
-      if (err.status == 'wrong') {
-        self.setState({
-          trackingStatus: null,
-          showTrackingInformation: true,
-          errorMessage: err.message
-        });
-      }
+    .catch(WrongStatusException, function (err) {
+      self.setState({
+        trackingStatus: null,
+        showTrackingInformation: true,
+        errorMessage: err.message
+      });
     });
   },
   handleTrackingRequestUpdate (requestData) {

@@ -3,6 +3,7 @@ import moment from 'moment';
 import {stream} from '../../../util/logger';
 import when from 'when';
 import {CourierNotFoundException, WrongTrackingDataException} from '../../../util/exceptions';
+import nodeValidator from 'validator';
 
 class Oca {
   constructor() {
@@ -72,7 +73,7 @@ class Oca {
     if (!trackingData) {
       return when.reject(new Error('trackingData should be defined'));
     }
-    if (!trackingData.packageId) {
+    if (!trackingData.packageId || !nodeValidator.isInt(trackingData.packageId)) {
       return when.reject(new WrongTrackingDataException(`trackingData: ${JSON.stringify(trackingData)} wrong for courier: ${this.courier}`));
     }
 

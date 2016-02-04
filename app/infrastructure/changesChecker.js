@@ -6,7 +6,7 @@ import trackingService from '../services/trackingService';
 import EmailManager from './emailManager';
 import {ExpiredTrackingException, NoDifferencesException} from '../util/exceptions';
 
-const minuteInMillis = 60 * 1000;
+const intervalTime = 60 * 1000;
 
 function checkForChangesAndNotify(tracking) {
   return trackingService.trackPackage(
@@ -61,5 +61,5 @@ export default function () {
     });
 
     stream.info('finishing changes checker interval');
-  }, 30* 1000);
+  }, intervalTime);
 }

@@ -116,14 +116,6 @@ export default class Courier {
       {
         label: 'OCA',
         value: 'oca'
-      },
-      {
-        label: 'BusPack',
-        value: 'buspack'
-      },
-      {
-        label: 'Via Cargo',
-        value: 'via-cargo'
       }
     ];
   }

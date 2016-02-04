@@ -22,7 +22,7 @@ export default function (app) {
 
   app.post(urlMap.subscribe, (req, res) => {
     req.checkBody('email', 'Ingrese un email correctamente').notEmpty().isEmail();
-    req.checkBody('packageInformation', 'Debe ingresar la información del paquete').notEmpty().isJSON();
+    req.checkBody('packageInformation', 'Debe ingresar la información del paquete').notEmpty();
 
     req.sanitizeBody('receiveMoreInfo').toBoolean();
 

@@ -5,6 +5,7 @@ import Label from '../common/Label.jsx';
 import Button from '../common/Button.jsx';
 import Input from '../common/Input.jsx';
 import {TrackerActions} from './TrackerActions';
+import {WrongStatusException} from '../../exceptions';
 
 export default React.createClass({
   displayName: 'SubscribeForm',
@@ -18,7 +19,8 @@ export default React.createClass({
       email: '',
       receiveMoreInfo: '',
       loading: false,
-      showSubscribedDone: false
+      showSubscribedDone: false,
+      errorMessage: null
     };
   },
   changeEmail (event) {
@@ -53,6 +55,19 @@ export default React.createClass({
             self.setState({showSubscribedDone: false});
           }, 10000);
           self.props.setWorking(false);
+        })
+        .catch((err) => {
+          if (err instanceof WrongStatusException) {
+            self.setState({
+              errorMessage: err.message,
+              loading: false
+            });
+            setTimeout(function() {
+              self.setState({errorMessage: null});
+            }, 10000);
+            self.props.setWorking(false);
+          }
+          // Log to analytics
         });
       });
     }
@@ -61,7 +76,13 @@ export default React.createClass({
     const self = this;
     const disabled = (self.props.parentIsWorking || self.state.loading);
     const formSection = function() {
-      if (self.state.showSubscribedDone) {
+      if (self.state.errorMessage) {
+        return (
+          <div className="mdl-card__supporting-text red-text">
+            <p><strong>{self.state.errorMessage}</strong></p>
+          </div>
+        );
+      } else if (self.state.showSubscribedDone) {
         return (
           <div className="mdl-card__supporting-text red-text">
             <p><strong>Ha comenzado el proceso de suscripción. Revisá tu casilla de correo y confirmá la suscripción en el email recibido.</strong></p>

@@ -81,6 +81,7 @@ gulp.task('dev', ['dev-env', 'lint', 'build', 'serve']);
 gulp.task('debug', ['dev-env', 'lint', 'runTests', 'build', 'serve']);
 gulp.task('test', ['runTests']);
 gulp.task('ci', ['lint', 'runTests', 'build']);
+gulp.task('prod', ['prod-env', 'build', 'serve']);
 
 var paths = {
   server: {
@@ -100,6 +101,11 @@ var paths = {
 gulp.task('dev-env', function() {
   return plugins.env.set({ NODE_ENV: 'development' })
     .pipe(notifier('using development environment'));
+});
+
+gulp.task('prod-env', function() {
+  return plugins.env.set({ NODE_ENV: 'production' })
+    .pipe(notifier('using production environment'));
 });
 
 //run app using nodemon

@@ -4,6 +4,10 @@ Follow automatic shipments from OCA courier.
 
 Visit the running website at [Sigue Tu Envío](http://www.siguetuenvio.com)
 
+# Contributing #
+
+Pull requests are more than welcome.
+
 # Run it #
 
 - Clone the repo.

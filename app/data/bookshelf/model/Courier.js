@@ -36,7 +36,7 @@ class Oca {
       }).Descripcion_Motivo;
 
       if (date) {
-        date = moment.parseZone(date);
+        date = moment(date);
       }
 
       return {

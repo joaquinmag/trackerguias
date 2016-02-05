@@ -35,7 +35,7 @@ export default class Tracking {
         if (Update.isTrackingExpired(oldUpdates)) {
           return tracking.set({
             expired: true,
-            updated: moment().utc().format()
+            updated: moment().utc().format("YYYY-MM-DD HH:mm:ss")
           }).save()
           .then(() => {
             return when.reject(new ExpiredTrackingException());
@@ -49,7 +49,7 @@ export default class Tracking {
           .saveUpdates(tracking.get('id'), differences, transaction)
           .then(() => {
             return tracking.set({
-              updated: moment().utc().format()
+              updated: moment().utc().format("YYYY-MM-DD HH:mm:ss")
             }).save(null, {transacting: transaction});
           });
       })
@@ -85,7 +85,7 @@ export default class Tracking {
           marketing: followTrackingData.receiveMoreInfo,
           expired: followTrackingData.expired,
           trackingData: JSON.stringify(followTrackingData.trackingData),
-          updated: moment().utc().format()
+          updated: moment().utc().format("YYYY-MM-DD HH:mm:ss")
         }).save(null, {transacting: transaction});
       })
       .then((savedTracking) => {
@@ -95,7 +95,7 @@ export default class Tracking {
     }
 
     // create new one
-    const rightNow = moment().utc().format();
+    const rightNow = moment().utc().format("YYYY-MM-DD HH:mm:ss");
     return dbTracking.forge({
       courier: followTrackingData.courier,
       email: followTrackingData.email,

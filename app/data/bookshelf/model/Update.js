@@ -20,10 +20,10 @@ export default class Update {
 
   static saveUpdates(trackingId, trackingUpdates, transaction) {
     const dbUpdates = db.models.Update;
-    const rightNow = moment().utc().format();
+    const rightNow = moment().utc().format("YYYY-MM-DD HH:mm:ss");
     return when.map(trackingUpdates, (update) => {
       return dbUpdates.forge({
-        fecha: update.fecha.utc().format(),
+        fecha: update.fecha.utc().format("YYYY-MM-DD HH:mm:ss"),
         estado: update.estado,
         sucursal: update.sucursal,
         motivo: update.motivo,

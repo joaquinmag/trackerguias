@@ -23,7 +23,7 @@ export default class OcaComparer {
 
     const normalizedOldUpdates = self.tracking.related('updates').map((trackingUpdate) => {
       return {
-        fecha: moment(trackingUpdate.get('fecha')),
+        fecha: moment.utc(trackingUpdate.get('fecha')),
         estado: trackingUpdate.get('estado'),
         sucursal: trackingUpdate.get('sucursal'),
         motivo: trackingUpdate.get('motivo')
@@ -31,7 +31,7 @@ export default class OcaComparer {
     }).sort(fechaSort);
     const normalizedNewUpdates = newUpdatesFromServer.map((trackingUpdate) => {
       return {
-        fecha: moment.parseZone(trackingUpdate.fecha),
+        fecha: moment(trackingUpdate.fecha),
         estado: trackingUpdate.estado,
         sucursal: trackingUpdate.sucursal,
         motivo: trackingUpdate.motivo

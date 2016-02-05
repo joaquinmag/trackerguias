@@ -1,0 +1,13 @@
+*.donotdelete
+*.gitignore
+*.eslintignore
+*.eslintrc
+*.travis.yml
+all-logs*
+CONTRIBUTING.md
+Dockerfile
+LICENSE
+README.md
+.git/
+node_modules/
+deploy/
